@@ -16,6 +16,7 @@ function Cylinder() {
 
         const rotat = gsap.to(meshRef.current.rotation, {
             z: Math.PI * 1,
+            y: Math.PI * 1,
             ease: "sine",
             scrollTrigger: {
                 trigger: document.body,
@@ -45,7 +46,7 @@ function Cylinder() {
 
     return (
         <mesh ref={meshRef} position={[0, 2, 0]}>
-            <cylinderGeometry args={[1, 1, 3, 32]} />
+            <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color="blue" />
         </mesh>
     );
