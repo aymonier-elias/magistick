@@ -1,0 +1,9 @@
+ARBRE MAGIQUE — EXPORT AVEC TEXTURES CORRIGÉES
+
+arbre_magique_textures.glb : modèle avec les couleurs et les cinq textures intégrées (couleurs des feuilles, du bois et du feuillage intérieur ; reliefs du bois et du feuillage intérieur).
+arbre_magique_textures.blend : version préparée pour l'export, avec textures empaquetées et feuilles partageant leur maillage pour limiter la mémoire. Le tronc et les racines sont regroupés. Les Geometry Nodes sont convertis pour cette version ; le fichier source original reste inchangé.
+textures/ : copies séparées des cinq textures PNG.
+
+La densité de Couronne_Base utilisée est 25.000 (= 25). Les deux couronnes contiennent 7 118 instances de feuilles au total.
+
+Dans Blender, activer « Aperçu matériau » ou « Rendu ». Le mode Solide peut afficher du gris même si les textures sont présentes.

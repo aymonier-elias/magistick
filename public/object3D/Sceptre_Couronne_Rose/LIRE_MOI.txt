@@ -1,0 +1,7 @@
+SCEPTRE ROSE ET ARGENT
+
+Seules les couleurs ont été modifiées par rapport au sceptre métallique original : manche rose clair et ornements rose métallique, croissant argenté.
+Géométrie, relief, brillance et paramètres métalliques conservés.
+
+Le GLB contient les matériaux et la texture intégrés. Le fichier Blender contient également la texture empaquetée. Le dossier textures en fournit une copie séparée.
+Dans Blender, utiliser Aperçu matériau ou Rendu pour voir les couleurs.

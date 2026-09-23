@@ -1,10 +1,10 @@
-import Baton from "@/components/Baton";
+import Arbre from "@/components/Arbre";
 
 export default function Home() {
   return (
     <>
       <h1>Magistick</h1>
-      <Baton />
+      <Arbre />
 
       <section style={{ padding: "2rem" }}>
         <h2>À propos</h2>

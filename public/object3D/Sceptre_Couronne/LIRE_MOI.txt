@@ -1,0 +1,8 @@
+SCEPTRE COURONNE
+
+sceptre_lunaire_metallique.glb : modèle à importer, couleurs, métal, vernis et texture de relief intégrés dans le fichier.
+sceptre_lunaire_metallique.blend : modèle modifiable dans Blender 5.2, texture empaquetée.
+textures/ : copie séparée de la texture.
+sceptre_metallique_apercu.png : rendu de présentation.
+
+Dans Blender, activer « Aperçu matériau » ou « Rendu » pour voir les matériaux. Le mode Solide peut afficher un objet gris. Les reflets métalliques nécessitent un éclairage ou un environnement.
