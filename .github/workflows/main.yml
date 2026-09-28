@@ -25,7 +25,7 @@ jobs:
 
       - name: Sync team branches
         run: |
-          for branch in elias lauryne; do
+          for branch in elias lauryne ines develop; do
             echo "🔄 Synchronisation de $branch avec main"
 
             git fetch origin "$branch"
