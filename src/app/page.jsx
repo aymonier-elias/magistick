@@ -7,12 +7,9 @@ export default function Home() {
       <Arbre />
 
       <section style={{ padding: "2rem" }}>
-        <h2>À propos</h2>
+        <h2>Teste des github action</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          C'est mieux la ? Avec deux commit
         </p>
       </section>
 
