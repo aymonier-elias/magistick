@@ -1,0 +1,42 @@
+name: Sync team branches with main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync team branches
+        run: |
+          for branch in elias lauryne; do
+            echo "🔄 Synchronisation de $branch avec main"
+
+            git fetch origin "$branch"
+            git checkout "$branch"
+
+            if git merge origin/main --no-edit; then
+              git push origin "$branch"
+              echo "✅ $branch mise à jour"
+            else
+              echo "❌ Conflit sur $branch"
+              git merge --abort || true
+              exit 1
+            fi
+          done
