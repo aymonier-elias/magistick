@@ -1,39 +1,17 @@
-name: Deploy DEV
+name: Test SSH key
+  env:
+    SSH_KEY: ${{ secrets.DEV_SSH_KEY }}
+  run: |
+    printf '%s\n' "$SSH_KEY" > /tmp/deploy_key
+    chmod 600 /tmp/deploy_key
 
-on:
-  push:
-    branches:
-      - develop
+    echo "Début de la clé :"
+    head -n 1 /tmp/deploy_key
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    echo "Fin de la clé :"
+    tail -n 1 /tmp/deploy_key
 
-    steps:
-      - name: Deploy to DEV
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.DEV_USER }}
-          port: ${{ secrets.DEV_PORT }}
-          key: ${{ secrets.DEV_SSH_KEY }}
+    echo "Test de la clé..."
+    ssh-keygen -y -f /tmp/deploy_key > /dev/null
 
-          script: |
-            set -e
-
-            cd /home/${{ secrets.DEV_USER }}/magistick
-
-            echo "Mise à jour du code..."
-            git fetch origin
-            git reset --hard origin/develop
-
-            echo "Installation des dépendances..."
-            npm ci
-
-            echo "Build Next.js..."
-            npm run build
-
-            echo "Redémarrage de l'application..."
-            pm2 restart magistick
-
-            echo "Déploiement DEV terminé !"
+    echo "Clé SSH valide."
