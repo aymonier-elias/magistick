@@ -1,0 +1,39 @@
+name: Deploy DEV
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to DEV
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          port: ${{ secrets.DEV_PORT }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+
+          script: |
+            set -e
+
+            cd /home/elias/magistick
+
+            echo "==> Mise à jour du code"
+            git fetch origin
+            git reset --hard origin/develop
+
+            echo "==> Installation des dépendances"
+            npm ci
+
+            echo "==> Build Next.js"
+            npm run build
+
+            echo "==> Redémarrage de PM2"
+            pm2 restart magistick
+
+            echo "==> Déploiement DEV terminé"
