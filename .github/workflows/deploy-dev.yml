@@ -21,19 +21,19 @@ jobs:
           script: |
             set -e
 
-            cd /home/elias/magistick
+            cd /home/${{ secrets.DEV_USER }}/magistick
 
-            echo "==> Mise à jour du code"
+            echo "Mise à jour du code..."
             git fetch origin
             git reset --hard origin/develop
 
-            echo "==> Installation des dépendances"
+            echo "Installation des dépendances..."
             npm ci
 
-            echo "==> Build Next.js"
+            echo "Build Next.js..."
             npm run build
 
-            echo "==> Redémarrage de PM2"
+            echo "Redémarrage de l'application..."
             pm2 restart magistick
 
-            echo "==> Déploiement DEV terminé"
+            echo "Déploiement DEV terminé !"
