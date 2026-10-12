@@ -1,0 +1,39 @@
+name: Deploy PROD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to PROD
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          port: ${{ secrets.PROD_PORT }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+
+          script: |
+            set -e
+
+            cd /home/${{ secrets.PROD_USER }}/magistick
+
+            echo "Mise à jour du code..."
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "Installation des dépendances..."
+            npm ci
+
+            echo "Build Next.js..."
+            npm run build
+
+            echo "Redémarrage de l'application..."
+            pm2 restart magistick
+
+            echo "Déploiement PROD terminé !"
