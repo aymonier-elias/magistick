@@ -12,11 +12,16 @@ jobs:
     steps:
       - name: Deploy to DEV
         uses: appleboy/ssh-action@v1
+        env:
+          WC_URL: ${{ secrets.DEV_WC_URL }}
+          WC_CONSUMER_KEY: ${{ secrets.DEV_WC_CONSUMER_KEY }}
+          WC_CONSUMER_SECRET: ${{ secrets.DEV_WC_CONSUMER_SECRET }}
         with:
           host: ${{ secrets.DEV_HOST }}
           username: ${{ secrets.DEV_USER }}
           port: ${{ secrets.DEV_PORT }}
           key: ${{ secrets.DEV_SSH_KEY }}
+          envs: WC_URL,WC_CONSUMER_KEY,WC_CONSUMER_SECRET
 
           script: |
             set -e
@@ -26,6 +31,11 @@ jobs:
             echo "Mise à jour du code..."
             git fetch origin
             git reset --hard origin/develop
+
+            echo "Écriture du .env.local..."
+            umask 077
+            printf 'WC_URL=%s\nWC_CONSUMER_KEY=%s\nWC_CONSUMER_SECRET=%s\n' \
+              "$WC_URL" "$WC_CONSUMER_KEY" "$WC_CONSUMER_SECRET" > .env.local
 
             echo "Installation des dépendances..."
             npm ci
