@@ -77,7 +77,7 @@ export default function TestApiPage() {
     setOccupe(true);
     setResultat(null);
     try {
-      const res = await fetch('/api/test-crud', {
+      const res = await fetch('../api/test-crud', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, payload }),
