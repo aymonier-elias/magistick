@@ -1,7 +1,3 @@
-<<<<<<<< HEAD:src/app/api/test-crud/route.js
-
-========
->>>>>>>> elias:src/app/api/test-crud/test-crud-route.js
 // src/app/api/test-crud/route.js
 //
 // Route de TEST : exécute les fonctions de woocommerce-crud.js à la demande
