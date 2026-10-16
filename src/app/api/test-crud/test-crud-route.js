@@ -1,4 +1,4 @@
-// src/api/test-crud/route.js
+// src/app/api/test-crud/route.js
 //
 // Route de TEST : exécute les fonctions de woocommerce-crud.js à la demande
 // de la page /test-api.

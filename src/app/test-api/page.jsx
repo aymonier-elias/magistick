@@ -77,12 +77,18 @@ export default function TestApiPage() {
     setOccupe(true);
     setResultat(null);
     try {
-      const res = await fetch('../api/test-crud', {
+      const res = await fetch('/api/test-crud', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, payload }),
       });
-      const data = await res.json();
+      const texte = await res.text();
+      let data;
+      try {
+        data = JSON.parse(texte);
+      } catch {
+        data = { error: 'Réponse non-JSON', debut: texte.slice(0, 300) };
+      }
       setResultat({ ok: res.ok, status: res.status, action, data });
     } catch (e) {
       setResultat({ ok: false, status: 0, action, data: { error: e.message } });
