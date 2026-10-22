@@ -1,0 +1,368 @@
+.conteneur {
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gauche {
+    flex: 1 1 600px;
+    min-width: 0;
+    min-height: 760px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 42%, var(--violet) 0%, var(--indigo) 45%, var(--nuit) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 56px 0 56px;
+}
+
+.cercle {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    width: 0;
+    height: 0;
+}
+
+/* Accroche */
+.texte {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 560px;
+}
+
+.texte h1 {
+    margin: 0;
+    font-family: var(--titre);
+    font-weight: 900;
+    font-size: 54px;
+    line-height: 1.08;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.texte h1 span {
+    color: var(--cyan);
+}
+
+.droite {
+    flex: 1 1 480px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px 48px 0 46px;
+}
+
+.retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--gris);
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.retour:hover {
+    color: var(--blanc);
+}
+
+.boite {
+    width: 100%;
+    max-width: 440px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.partieconnexion {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.boutons {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 4px;
+    border-radius: 28px;
+    background: var(--indigo);
+    border: 1px solid var(--bordure-douce);
+}
+
+.onglets {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: calc(50% - 4px);
+    border-radius: 24px;
+    background: var(--rose);
+    box-shadow: 0 0 24px rgba(227, 92, 152, 0.55);
+    transition: left .35s cubic-bezier(.6, .05, .3, 1);
+}
+
+.connexion,
+.inscription {
+    position: relative;
+    z-index: 1;
+    height: 48px;
+    border: none;
+    background: transparent;
+    color: var(--blanc);
+    font-family: var(--titre);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: color .3s;
+}
+
+.actif {
+    color: var(--nuit);
+}
+
+
+.partieconnexion {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: arcRise .45s ease-out;
+}
+
+.entete {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.entete h2 {
+    margin: 0;
+    font-family: var(--titre);
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.entete p {
+    margin: 0;
+    color: var(--gris);
+}
+
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--gris);
+}
+
+.champ input {
+    min-width: 0;
+    height: 52px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: var(--indigo);
+    color: var(--blanc);
+    border: 1px solid var(--bordure);
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color .2s;
+}
+
+.champ input::placeholder {
+    color: rgba(189, 184, 214, 0.6);
+}
+
+.champ input.invalide {
+    border-color: var(--rose);
+}
+
+.champ-mdp {
+    position: relative;
+    display: flex;
+}
+
+.champ-mdp input {
+    flex: 1 1 auto;
+    padding-right: 96px;
+}
+
+.afficher {
+    padding: 0 14px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--cyan);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mdp-oublie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.mdp-oublie a {
+    color: var(--cyan);
+}
+
+
+
+
+
+.btn-principal {
+    height: 58px;
+    border-radius: 29px;
+    border: none;
+    background: var(--rose);
+    color: var(--nuit);
+    font-family: var(--titre);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    box-shadow: 0 0 32px rgba(227, 92, 152, 0.5), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s;
+}
+
+.btn-principal:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 44px rgba(227, 92, 152, 0.7), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
+}
+
+.btn-principal:active {
+    transform: translateY(1px);
+}
+
+
+.separateur {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.separateur span {
+    flex: 1 1 auto;
+    height: 1px;
+    background: rgba(248, 247, 244, 0.15);
+}
+
+.bascule {
+    margin: 0;
+    text-align: center;
+    color: var(--gris);
+    font-size: 15px;
+}
+
+.lien-btn {
+    min-height: 44px;
+    padding: 0 4px;
+    border: none;
+    background: transparent;
+    color: var(--rose);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lien-btn:hover {
+    color: var(--rose-clair);
+}
+
+
+.accepter {
+    align-items: flex-start;
+    padding-top: 4px;
+}
+
+.accepter input {
+    margin-top: 3px;
+}
+
+.accepter a {
+    color: var(--cyan);
+}
+
+
+
+
+
+.partieinscription {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.champ-mdp .afficher {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    height: 44px;
+}
+
+.accepter {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.accepter input {
+    margin-top: 3px;
+    accent-color: var(--rose);
+}
+
+.erreur {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(227, 92, 152, 0.14);
+    border: 1px solid var(--rose);
+    color: var(--rose-clair);
+    font-size: 14px;
+}
+
+.succes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    padding: 48px 32px;
+    border-radius: 28px;
+    background: var(--indigo);
+    border: 1px solid rgba(120, 238, 251, 0.35);
+}
+
+.succes h2 {
+    margin: 0;
+    font-family: var(--titre);
+    font-size: 30px;
+}
+
+.succes p {
+    margin: 0;
+    color: var(--gris);
+}
+
