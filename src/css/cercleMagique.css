@@ -1,0 +1,60 @@
+/* Tous les éléments qui tournent pivotent autour du centre du viewBox (272, 272) */
+.cercle-magique .cm-rays,
+.cercle-magique .cm-dashed,
+.cercle-magique .cm-runes,
+.cercle-magique .cm-star,
+.cercle-magique .cm-inner-ring {
+  transform-box: view-box;
+  transform-origin: 272px 272px;
+}
+
+/* Rayons : rotation lente */
+.cm-rays {
+  animation: cm-spin 60s linear infinite;
+}
+
+/* Cercle pointillé : sens inverse */
+.cm-dashed {
+  animation: cm-spin 40s linear infinite reverse;
+}
+
+/* Runes : très lente rotation */
+.cm-runes {
+  animation: cm-spin 120s linear infinite;
+}
+
+/* Petites étoiles : pulsation (transform-origin posé en inline par le composant) */
+.cm-sparkle {
+  transform-box: view-box;
+  animation: cm-pulse 3s ease-in-out infinite;
+}
+
+/* Étoiles centrales : rotations alternées */
+.cm-star-1 { animation: cm-spin 30s linear infinite; }
+.cm-star-2 { animation: cm-spin 20s linear infinite reverse; }
+.cm-star-3 { animation: cm-pulse 2.5s ease-in-out infinite; }
+.cm-star-4 { animation: cm-spin 25s linear infinite; }
+
+/* Scintillement des runes (délais gérés via nth-child) */
+.cm-rune {
+  animation: cm-twinkle 4s ease-in-out infinite;
+}
+.cm-rune:nth-child(3n)   { animation-delay: 0.6s; }
+.cm-rune:nth-child(3n+1) { animation-delay: 1.8s; }
+
+@keyframes cm-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes cm-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.25); }
+}
+@keyframes cm-twinkle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* Accessibilité : respecte la préférence « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+  .cercle-magique * { animation: none !important; }
+}
