@@ -18,7 +18,7 @@ export default function Home() {
         <ul>
           <li>Fonctionnalité 1</li>
           <li>Fonctionnalité 2</li>
-          <li>Fonctionnalité 3</li>
+          <li>ça me casse les couille le ssh</li>
           <li>Fonctionnalité 4</li>
         </ul>
       </section>

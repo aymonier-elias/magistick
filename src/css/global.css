@@ -1,3 +1,20 @@
+:root {
+    --nuit: #101A23;
+    --indigo: #161650;
+    --violet: #4E299C;
+    --pourpre: #9D3CC0;
+    --rose: #E35C98;
+    --rose-clair: #FFB5D6;
+    --cyan: #78EEFB;
+    --blanc: #F8F7F4;
+    --gris: #BDB8D6;
+    --bordure: rgba(248, 247, 244, 0.2);
+    --bordure-douce: rgba(248, 247, 244, 0.12);
+
+    --titre: 'Orbitron', sans-serif;
+    --texte: 'Fira Sans', sans-serif;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -5,6 +22,10 @@
 }
 
 body {
-    background-color: pink;
-    color: black;
+    margin: 0;
+    background: var(--nuit);
+    color: var(--blanc);
+    font-family: var(--texte);
+    font-size: 16px;
+    line-height: 1.6;
 }
