@@ -33,6 +33,11 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
+            echo "Écriture du fichier .env.local..."
+            umask 077
+            printf 'WC_URL=%s\nWC_CONSUMER_KEY=%s\nWC_CONSUMER_SECRET=%s\nENABLE_TEST_PAGE=%s\n' \
+              "$WC_URL" "$WC_CONSUMER_KEY" "$WC_CONSUMER_SECRET" "$ENABLE_TEST_PAGE" > .env.local
+
             echo "Installation des dépendances..."
             npm ci
 
