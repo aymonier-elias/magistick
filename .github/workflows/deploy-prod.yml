@@ -12,11 +12,17 @@ jobs:
     steps:
       - name: Deploy to PROD
         uses: appleboy/ssh-action@v1
+        env:
+          WC_URL: ${{ secrets.PROD_WC_URL }}
+          WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
+          WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
+          ENABLE_TEST_PAGE : true
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USER }}
           port: ${{ secrets.PROD_PORT }}
           key: ${{ secrets.PROD_SSH_KEY }}
+          envs: WC_URL,WC_CONSUMER_KEY,WC_CONSUMER_SECRET,ENABLE_TEST_PAGE 
 
           script: |
             set -e
