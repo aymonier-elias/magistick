@@ -25,6 +25,7 @@ jobs:
           WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
           ENABLE_TEST_PAGE: "true"
         run: |
+          touch .env.local
           {
             echo "WC_URL=$WC_URL"
             echo "WC_CONSUMER_KEY=$WC_CONSUMER_KEY"
