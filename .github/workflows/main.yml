@@ -18,6 +18,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Create .env.local
+        env:
+          WC_URL: ${{ secrets.PROD_WC_URL }}
+          WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
+          WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
+          ENABLE_TEST_PAGE: "true"
+        run: |
+          {
+            echo "WC_URL=$WC_URL"
+            echo "WC_CONSUMER_KEY=$WC_CONSUMER_KEY"
+            echo "WC_CONSUMER_SECRET=$WC_CONSUMER_SECRET"
+            echo "ENABLE_TEST_PAGE=$ENABLE_TEST_PAGE"
+          } > .env.local
+
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
@@ -25,7 +39,7 @@ jobs:
 
       - name: Sync team branches
         run: |
-          for branch in elias lauryne ines; do
+          for branch in elias lauryne ines emilie enzo; do
             echo "🔄 Synchronisation de $branch avec main"
 
             git fetch origin "$branch"

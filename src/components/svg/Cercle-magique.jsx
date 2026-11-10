@@ -1,5 +1,5 @@
 import { useId } from "react";
-import "../../css/cercleMagique.css";
+import "../../css/connexion/cercleMagique.css";
 
 const C = 272; // centre du viewBox 544x544
 
