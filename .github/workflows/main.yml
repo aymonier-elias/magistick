@@ -18,21 +18,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create .env.local
-        env:
-          WC_URL: ${{ secrets.PROD_WC_URL }}
-          WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
-          WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
-          ENABLE_TEST_PAGE: "true"
-        run: |
-          touch .env.local
-          {
-            echo "WC_URL=$WC_URL"
-            echo "WC_CONSUMER_KEY=$WC_CONSUMER_KEY"
-            echo "WC_CONSUMER_SECRET=$WC_CONSUMER_SECRET"
-            echo "ENABLE_TEST_PAGE=$ENABLE_TEST_PAGE"
-          } > .env.local
-
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
@@ -40,11 +25,17 @@ jobs:
 
       - name: Sync team branches
         run: |
+          failed=0
           for branch in elias lauryne ines emilie enzo; do
             echo "🔄 Synchronisation de $branch avec main"
 
+            if ! git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
+              echo "⚠️ La branche $branch n'existe pas sur le remote, ignorée"
+              continue
+            fi
+
             git fetch origin "$branch"
-            git checkout "$branch"
+            git checkout -B "$branch" "origin/$branch"
 
             if git merge origin/main --no-edit; then
               git push origin "$branch"
@@ -52,6 +43,20 @@ jobs:
             else
               echo "❌ Conflit sur $branch"
               git merge --abort || true
-              exit 1
+              failed=1
             fi
+          done
+          exit $failed
+
+      - name: Fill .env.local
+        env:
+          WC_URL: ${{ secrets.PROD_WC_URL }}
+          WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
+          WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
+          ENABLE_TEST_PAGE: "true"
+        run: |
+          touch .env.local
+          for var in WC_URL WC_CONSUMER_KEY WC_CONSUMER_SECRET ENABLE_TEST_PAGE; do
+            sed -i "/^${var}=/d" .env.local
+            echo "${var}=${!var}" >> .env.local
           done
