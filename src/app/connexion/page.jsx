@@ -1,6 +1,6 @@
 "use client";
 // juste poue test dev
-import '../../css/connexion.css';
+import '../../css/connexion/connexion.css';
 
 import CercleMagique from '../../components/svg/Cercle-magique';
 import Input from '../../components/form/input';
