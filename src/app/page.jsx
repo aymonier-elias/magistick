@@ -1,9 +1,30 @@
+"use client";
+
 import Arbre from "@/components/Arbre";
 
+import useAuth from "@/hook/useAuth";
+
 export default function Home() {
+  const {
+    user,
+    loading,
+    isAuthenticated,
+    deconnecter,
+  } = useAuth();
+
   return (
     <>
       <h1>Magistick</h1>
+      {
+        isAuthenticated ?
+          (
+            <>
+              <h2>Bounjour {user.first_name}</h2>
+              <button onClick={deconnecter}>Logout</button>
+            </>
+          )
+          : (<a href="/connexion">Connexion</a>)
+      }
       <Arbre />
 
       <section style={{ padding: "2rem" }}>

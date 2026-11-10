@@ -10,7 +10,7 @@ export default function Input({ label, name, type = "text", required = false }) 
                     {label}
                     <span className="champ-mdp">
                         <input type={visible ? type : "text"} name={name} autoComplete="current-password" required={required} />
-                        <button className="afficher" onClick={() => setVisible((current) => !current)}>Afficher</button>
+                        <button type="button" className="afficher" onClick={() => setVisible((current) => !current)}>{visible ? "Afficher" : "Masquer"}</button>
                     </span>
                 </label>
                 <div className="mdp-oublie">

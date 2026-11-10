@@ -47,16 +47,3 @@ jobs:
             fi
           done
           exit $failed
-
-      - name: Fill .env.local
-        env:
-          WC_URL: ${{ secrets.PROD_WC_URL }}
-          WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
-          WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
-          ENABLE_TEST_PAGE: "true"
-        run: |
-          touch .env.local
-          for var in WC_URL WC_CONSUMER_KEY WC_CONSUMER_SECRET ENABLE_TEST_PAGE; do
-            sed -i "/^${var}=/d" .env.local
-            echo "${var}=${!var}" >> .env.local
-          done
