@@ -1,6 +1,6 @@
 export default function ProduitCard({ produit }) {
     return (
-        <article key={produit.id} className="produit" >
+        <article className="produit" >
             {
                 produit.images?.length > 0 ? (
                     <img
@@ -12,7 +12,7 @@ export default function ProduitCard({ produit }) {
                     <p>Aucune image disponible</p>
                 )
             }
-            <h2>{produit.name}</h2 >
+            <h2><a href={`/produits/${produit.id}`}>{produit.name}</a></h2>
             <p>
                 {produit.short_description
                     ? produit.short_description.replace(/<[^>]*>/g, "")

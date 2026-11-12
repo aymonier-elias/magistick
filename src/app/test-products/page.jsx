@@ -4,7 +4,7 @@
 import useProducts from "@/hooks/useProducts";
 import { useState } from "react";
 
-import ProduitCard from "@/components/produitCard";
+import ProduitCard from "@/components/catalogue/produitCard";
 export default function Boutique() {
     // Ce que l'utilisateur écrit dans le champ
     const [search, setSearch] = useState("");
