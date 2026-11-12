@@ -1,13 +1,11 @@
 "use client";
 
 import Arbre from "@/components/Arbre";
-import Header from "@/components/global/Header";
 
 export default function Home() {
 
   return (
     <>
-      <Header />
       <h1>Magistick</h1>
       <Arbre />
 

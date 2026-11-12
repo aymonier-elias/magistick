@@ -18,6 +18,8 @@ export default function Boutique() {
         error,
         actualiser,
     } = useProducts({
+        page:0,
+        parPage: 1,
         recherche: recherche,
     });
 
