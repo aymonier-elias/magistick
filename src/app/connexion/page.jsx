@@ -6,8 +6,8 @@ import '../../css/connexion/connexion.css';
 import CercleMagique from '../../components/svg/Cercle-magique';
 import Input from '../../components/form/input';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Connexion() {
     const [connexion, setConnexion] = useState(true);
@@ -15,7 +15,17 @@ export default function Connexion() {
     const [message, setMessage] = useState('');
     const [chargement, setChargement] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
 
+    const mode = searchParams.get("mode");
+
+    useEffect(() => {
+        if (mode === "register") {
+            setConnexion(false);
+        } else {
+            setConnexion(true);
+        }
+    }, [mode]);
 
     async function soumettre(e) {
         e.preventDefault();
