@@ -22,3 +22,7 @@
 .barreRecherche{
     margin-left: 100px;
 }
+.resultatProduit{
+    display: flex;
+    justify-content: space-around;
+}

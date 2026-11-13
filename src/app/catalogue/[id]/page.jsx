@@ -14,11 +14,22 @@ export default async function Produit({ params }) {
     throw e;
   }
 
+  console.log(produit)
+
   if (produit.status !== 'publish') notFound();
 
   return (
-    <div>
-      <h1>{produit.name}</h1>
+    <div className="resultatProduit">
+
+      <div className="imageProduit">
+        <img src={produit.images[0] ? produit.images[0].src : "a"} alt={produit.images[0] ? produit.images[0].alt : ""} />
+      </div>
+
+      <div className="infosProduit">
+        <h1>{produit.name}</h1>
+        <div>{produit.price} €</div>
+        <div>{produit.description}</div>
+      </div>
     </div>
   );
 }
