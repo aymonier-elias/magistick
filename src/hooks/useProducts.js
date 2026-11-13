@@ -7,7 +7,7 @@ export default function useProducts({
   page = 1,
   parPage = 20,
   recherche = "",
-  categorie = "",
+  categorie = "", 
 } = {}) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

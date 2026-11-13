@@ -13,7 +13,7 @@ export default function Header() {
     return (
         <header style={{ display: "flex", justifyContent: "space-around" }}>
             <a href="/" className="titre">MagiStick</a>
-            <a href="#">Accueil</a>
+            <a href="/">Accueil</a>
             <a href="/catalogue">Catalogue</a>
             <a href="#">A Propos</a>
             <a href="#">Avis</a>

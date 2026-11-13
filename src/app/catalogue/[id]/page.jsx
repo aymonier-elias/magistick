@@ -1,31 +1,24 @@
-"use client";
-
-import useProducts from "@/hooks/useProducts";
-import { useState } from "react";
-
+// src/app/boutique/[id]/page.jsx
+import { notFound } from 'next/navigation';
+import { lireProduit } from '@/lib/woocommerce-crud';
 import '@/css/produits/produits.css';
 
-export default function Produit() {
+export default async function Produit({ params }) {
+  const { id } = await params;
 
-    // const { id } = await params;
+  let produit;
+  try {
+    produit = await lireProduit(id);
+  } catch (e) {
+    if (e.status === 404) notFound();
+    throw e;
+  }
 
-    // Recherche envoyé
-    const [recherche, setRecherche] = useState("");
+  if (produit.status !== 'publish') notFound();
 
-    const {
-        products,
-        loading,
-        error,
-        actualiser,
-    } = useProducts({
-        page: 0,
-        parPage: 6,
-        recherche: recherche,
-    });
-
-    return (
-        <div>
-            <h1>Le catalogue des baguettes</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h1>{produit.name}</h1>
+    </div>
+  );
 }

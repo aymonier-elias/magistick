@@ -24,7 +24,7 @@ export default function Produits() {
         actualiser,
     } = useProducts({
         page: page,
-        parPage: 1,
+        parPage: 10,
         recherche: recherche,
     });
 
@@ -88,16 +88,16 @@ export default function Produits() {
                                 {products.length === 0 ? (
                                     <p>Aucun produit disponible.</p>
                                 ) : products.map((produit) => (
-                                    <ProduitCard produit={produit} />
+                                    <ProduitCard key={produit.id} produit={produit} />
                                 ))}
                             </>
                         )}
                     </div>
                 </div>
                 <div>
-                    <p onClick={() => {setPage(page > 1 ? page-1 : page)}}>-</p>
+                    <p onClick={() => { setPage(page > 1 ? page - 1 : page) }}>-</p>
                     <p>{page}</p>
-                    <p onClick={() => {setPage(page+1)}}>+</p>
+                    <p onClick={() => { setPage(page + 1) }}>+</p>
                 </div>
             </div>
         </div>

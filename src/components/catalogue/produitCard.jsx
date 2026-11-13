@@ -12,7 +12,7 @@ export default function ProduitCard({ produit }) {
                     <p>Aucune image disponible</p>
                 )
             }
-            <h2><a href={`/produits/${produit.id}`}>{produit.name}</a></h2>
+            <h2><a href={`/catalogue/${produit.id}`}>{produit.name}</a></h2>
             <p>
                 {produit.short_description
                     ? produit.short_description.replace(/<[^>]*>/g, "")
