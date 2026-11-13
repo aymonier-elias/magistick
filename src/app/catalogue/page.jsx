@@ -53,8 +53,14 @@ export default function Produits() {
 
                     {/* Barre de recherche */}
                     <label>Tout les produits
-                        <input className="barreRecherche" type="search" value={recherche} onChange={(e) => { setRecherche(e.target.value) }} />
+                        <input className="barreRecherche" type="search" value={search} onChange={(e) => { setSearch(e.target.value) }} />
                     </label>
+                    <button type="submit">
+                        Rechercher
+                    </button>
+                    <button onClick={reinitialiser}>
+                        Réinitialiser
+                    </button>
 
                     {/* Affiche la recherche en dessous de la barre de recherche */}
                     <div>{recherche ? (<p>Recherche : {recherche}</p>) : ("")}</div>
