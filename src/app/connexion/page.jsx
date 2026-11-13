@@ -7,26 +7,29 @@ import CercleMagique from '../../components/svg/Cercle-magique';
 import Input from '../../components/form/input';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Connexion() {
     const [connexion, setConnexion] = useState(true);
     const [erreur, setErreur] = useState('');
     const [message, setMessage] = useState('');
     const [chargement, setChargement] = useState(false);
+
     const router = useRouter();
-    const searchParams = useSearchParams();
 
-    const mode = searchParams.get("mode");
-
+    // Récupération du paramètre mode dans l'URL
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get("mode");
+
         if (mode === "register") {
             setConnexion(false);
         } else {
             setConnexion(true);
         }
-    }, [mode]);
+    }, []);
 
+    // Soumission du formulaire
     async function soumettre(e) {
         e.preventDefault();
 
@@ -71,9 +74,11 @@ export default function Connexion() {
             }
 
             setMessage(data.message);
+
             if (connexion) {
                 router.push('/');
             }
+
         } catch (error) {
             setErreur(error.message);
         } finally {
