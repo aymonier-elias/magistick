@@ -1,104 +1,65 @@
-"use client";
-
-import useProducts from "@/hooks/useProducts";
-import { useState } from "react";
+import Link from "next/link";
+import { getCatalogue } from "@/bdd/produits";
+import ProduitCard from "@/components/catalogue/produitCard";
 
 import '@/css/produits/produits.css';
 
-import ProduitCard from "@/components/catalogue/produitCard";
+const PAR_PAGE = 10;
 
-export default function Produits() {
-    // Recherche utilisateur
-    const [search, setSearch] = useState("")
+export default async function Produits({ searchParams }) {
+    const params = await searchParams;
+    const recherche = typeof params.recherche === "string" ? params.recherche.trim() : "";
+    const page = Math.max(1, Number(params.page) || 1);
 
-    // Recherche envoyé
-    const [recherche, setRecherche] = useState("");
+    const { produits, erreur } = await getCatalogue({ page, parPage: PAR_PAGE, recherche });
 
-    // Page demandé
-    const [page, setPage] = useState(1);
-
-    const {
-        products,
-        loading,
-        error,
-        actualiser,
-    } = useProducts({
-        page: page,
-        parPage: 10,
-        recherche: recherche,
-    });
-
-    // Valider la recherche
-    function rechercher(e) {
-        e.preventDefault();
-        setRecherche(search.trim());
-    }
-
-    // Réinitialiser la recherche
-    function reinitialiser() {
-        setSearch("");
-        setRecherche("");
-    }
+    // Lien vers une autre page en gardant la recherche
+    const lienPage = (n) => ({ pathname: "/catalogue", query: { ...(recherche && { recherche }), page: n } });
 
     return (
         <div>
-
             <div>
                 <h1>Le catalogue des baguettes</h1>
             </div>
 
-
             <div>
-                <form onSubmit={rechercher}>
-
-                    {/* Barre de recherche */}
-                    <label>Tout les produits
-                        <input className="barreRecherche" type="search" value={recherche} onChange={(e) => { setRecherche(e.target.value) }} />
+                {/* Barre de recherche : met à jour l'URL (?recherche=...) */}
+                <form action="/catalogue">
+                    <label>Tous les produits
+                        <input className="barreRecherche" type="search" name="recherche" defaultValue={recherche} />
                     </label>
-
-                    {/* Affiche la recherche en dessous de la barre de recherche */}
-                    <div>{recherche ? (<p>Recherche : {recherche}</p>) : ("")}</div>
+                    {recherche && (
+                        <p>Recherche : {recherche} — <Link href="/catalogue">Réinitialiser</Link></p>
+                    )}
                 </form>
 
                 {/* Bloc filtres + produits */}
                 <div className="filtres-catalogue">
-
-                    {/* Bloc filtres */}
-                    <form className="filtres" onSubmit={rechercher}>
+                    <div className="filtres">
                         <p>Filtres</p>
-                    </form>
-
-                    {/* Bloc produits */}
-                    {/* Chargement */}
-                    {loading && <p>Chargement des produits...</p>}
+                    </div>
 
                     <div id="resultatCatalogue">
-                        {/* Erreur */}
-                        {error && (
+                        {erreur ? (
                             <div>
-                                <p>Erreur : {error}</p>
-                                <button onClick={actualiser}>
-                                    Réessayer
-                                </button>
+                                <p>Erreur : {erreur}</p>
+                                <Link href={lienPage(page)}>Réessayer</Link>
                             </div>
-                        )}
-
-                        {!loading && !error && (
-                            <>
-                                {products.length === 0 ? (
-                                    <p>Aucun produit disponible.</p>
-                                ) : products.map((produit) => (
-                                    <ProduitCard key={produit.id} produit={produit} />
-                                ))}
-                            </>
+                        ) : produits.length === 0 ? (
+                            <p>Aucun produit disponible.</p>
+                        ) : (
+                            produits.map((produit) => (
+                                <ProduitCard key={produit.id} produit={produit} />
+                            ))
                         )}
                     </div>
                 </div>
-                <div>
-                    <p onClick={() => { setPage(page > 1 ? page - 1 : page) }}>-</p>
+
+                <nav>
+                    {page > 1 && <Link href={lienPage(page - 1)}>-</Link>}
                     <p>{page}</p>
-                    <p onClick={() => { setPage(page + 1) }}>+</p>
-                </div>
+                    {produits.length === PAR_PAGE && <Link href={lienPage(page + 1)}>+</Link>}
+                </nav>
             </div>
         </div>
     );

@@ -1,28 +1,29 @@
 // src/app/api/test-crud/route.js
 //
-// Route de TEST : exécute les fonctions de woocommerce-crud.js à la demande
+// Route de TEST : exécute les fonctions de src/bdd/produits.js et src/bdd/clients.js à la demande
 // de la page /test-api.
 //
 // Sécurité : la route est désactivée tant que la variable d'environnement
 // ENABLE_TEST_PAGE n'est pas égale à "true". Ne jamais l'activer en production.
  
-import * as crud from '@/lib/woocommerce-crud';
+import * as produits from '@/bdd/produits';
+import * as clients from '@/bdd/clients';
  
 // Liste blanche : seules ces actions peuvent être appelées
 const ACTIONS = {
   // Produits
-  listerProduits: (p) => crud.listerProduits(p),
-  lireProduit: ({ id }) => crud.lireProduit(id),
-  creerProduit: (p) => crud.creerProduit(p),
-  modifierProduit: ({ id, ...champs }) => crud.modifierProduit(id, champs),
-  supprimerProduit: ({ id, definitif }) => crud.supprimerProduit(id, { definitif }),
+  listerProduits: (p) => produits.listerProduits(p),
+  lireProduit: ({ id }) => produits.lireProduit(id),
+  creerProduit: (p) => produits.creerProduit(p),
+  modifierProduit: ({ id, ...champs }) => produits.modifierProduit(id, champs),
+  supprimerProduit: ({ id, definitif }) => produits.supprimerProduit(id, { definitif }),
  
   // Clients
-  listerClients: (p) => crud.listerClients(p),
-  lireClient: ({ id }) => crud.lireClient(id),
-  creerClient: (p) => crud.creerClient(p),
-  modifierClient: ({ id, ...champs }) => crud.modifierClient(id, champs),
-  supprimerClient: ({ id }) => crud.supprimerClient(id),
+  listerClients: (p) => clients.listerClients(p),
+  lireClient: ({ id }) => clients.lireClient(id),
+  creerClient: (p) => clients.creerClient(p),
+  modifierClient: ({ id, ...champs }) => clients.modifierClient(id, champs),
+  supprimerClient: ({ id }) => clients.supprimerClient(id),
 };
  
 export async function POST(request) {
