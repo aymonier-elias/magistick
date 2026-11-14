@@ -44,12 +44,15 @@ export function listerProduits({
   parPage = 20,
   recherche,
   categorie,
+  statut,
 } = {}) {
   const params = {
     page,
     per_page: parPage,
   };
 
+  // Sans statut, WooCommerce renvoie TOUS les produits (brouillons, privés...)
+  if (statut) params.status = statut;
   if (recherche) params.search = recherche;
   if (categorie) params.category = categorie;
 

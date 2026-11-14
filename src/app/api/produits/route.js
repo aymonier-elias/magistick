@@ -7,10 +7,12 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
 
     const produits = await listerProduits({
-      page: Number(searchParams.get("page")) || 1,
-      parPage: Number(searchParams.get("parPage")) || 20,
+      page: Math.max(1, Number(searchParams.get("page")) || 1),
+      parPage: Math.min(100, Math.max(1, Number(searchParams.get("parPage")) || 20)),
       recherche: searchParams.get("recherche") || undefined,
       categorie: searchParams.get("categorie") || undefined,
+      // Catalogue public : uniquement les produits publiés
+      statut: "publish",
     });
 
     return NextResponse.json({

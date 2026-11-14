@@ -16,7 +16,8 @@ jobs:
           WC_URL: ${{ secrets.PROD_WC_URL }}
           WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
           WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
-          ENABLE_TEST_PAGE : true
+          # Ne JAMAIS mettre 'true' en prod : /api/test-crud n'a aucune authentification
+          ENABLE_TEST_PAGE: 'false'
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USER }}
