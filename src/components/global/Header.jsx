@@ -1,31 +1,28 @@
-"use client";
+import Link from "next/link";
+import { getUtilisateurConnecte } from "@/bdd/auth";
+import { deconnexion } from "@/bdd/actions-auth";
 
-import useAuth from "@/hooks/useAuth";
-
-export default function Header() {
-    const {
-        user,
-        loading,
-        isAuthenticated,
-        deconnecter,
-    } = useAuth();
+export default async function Header() {
+    const user = await getUtilisateurConnecte();
 
     return (
         <header style={{ display: "flex", justifyContent: "space-around" }}>
-            <a href="/" className="titre">MagiStick</a>
-            <a href="/">Accueil</a>
-            <a href="/catalogue">Catalogue</a>
+            <Link href="/" className="titre">MagiStick</Link>
+            <Link href="/">Accueil</Link>
+            <Link href="/catalogue">Catalogue</Link>
             <a href="#">A Propos</a>
             <a href="#">Avis</a>
             <a href="#">Contact</a>
-            {isAuthenticated ?
+            {user ?
                 <div className="user">
                     <p>{user.first_name}</p>
-                    <button onClick={deconnecter}>Déconexion</button>
+                    <form action={deconnexion}>
+                        <button type="submit">Déconnexion</button>
+                    </form>
                 </div> :
                 <div className="connexion">
-                    <a href="/connexion">Connexion</a>
-                    <a href="/connexion?mode=register">Register</a>
+                    <Link href="/connexion">Connexion</Link>
+                    <Link href="/connexion?mode=register">Register</Link>
                 </div>}
         </header>
     );

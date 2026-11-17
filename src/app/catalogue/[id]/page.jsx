@@ -1,20 +1,15 @@
-// src/app/boutique/[id]/page.jsx
 import { notFound } from 'next/navigation';
-import { lireProduit } from '@/lib/woocommerce-crud';
 import DOMPurify from 'isomorphic-dompurify';
+import { getProduitPublie } from '@/bdd/produits';
 import '@/css/produits/produits.css';
 
 export default async function Produit({ params }) {
   const { id } = await params;
 
-  let produit;
-  try {
-    produit = await lireProduit(id);
-  } catch (e) {
-    if (e.status === 404) notFound();
-    throw e;
-  }
+  const produit = await getProduitPublie(id);
+  if (!produit) notFound();
 
+  // La description vient de WooCommerce en HTML : on la nettoie avant de l'afficher
   const descriptionClean = DOMPurify.sanitize(produit.description, {
     USE_PROFILES: { html: true },
     FORBID_TAGS: ["style", "form", "input", "button", "textarea", "select"],
@@ -22,15 +17,17 @@ export default async function Produit({ params }) {
     ALLOW_DATA_ATTR: false,
   });
 
-  console.log(produit)
-
-  if (produit.status !== 'publish') notFound();
+  const image = produit.images[0];
 
   return (
     <div className="resultatProduit">
 
       <div className="imageProduit">
-        <img src={produit.images.length > 0 ? produit.images[0].src : "a"} alt={produit.images[0] ? produit.images[0].alt : ""} />
+        {image ? (
+          <img src={image.src} alt={image.alt || produit.name} />
+        ) : (
+          <p>Aucune image disponible</p>
+        )}
       </div>
 
       <div className="infosProduit">
@@ -41,7 +38,7 @@ export default async function Produit({ params }) {
         {/* Vérification des attributs et affichage */}
         <div className="attributsProduits">{produit.attributes.length > 0 ? (
           produit.attributes.map(attribut => (
-            <div>
+            <div key={attribut.id || attribut.name}>
               {attribut.name}
 
               {/* Vérification des options et affichage */}
@@ -49,7 +46,7 @@ export default async function Produit({ params }) {
                 <div>
                   <ul>
                     {attribut.options.map(option => (
-                      <li>{option}</li>
+                      <li key={option}>{option}</li>
                     ))}
                   </ul>
                 </div>
