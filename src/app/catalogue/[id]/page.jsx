@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import { getProduitPublie } from '@/bdd/produits';
-import '@/css/produits/produits.css';
+import '@/css/catalogue/catalogue.css';
 
 export default async function Produit({ params }) {
   const { id } = await params;

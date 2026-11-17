@@ -4,9 +4,9 @@ import Form from "next/form";
 import { getCatalogue, getFiltresDisponibles, DISPONIBILITES } from "@/bdd/produits";
 import ProduitCard from "@/components/catalogue/produitCard";
 
-import '@/css/produits/produits.css';
+import '@/css/catalogue/catalogue.css';
 
-const PAR_PAGE = 10;
+const PAR_PAGE = 12;
 const NOMS_FILTRES = ["recherche", "categorie", "prixMin", "prixMax", "disponibilite"];
 
 // Les formulaires utilisent <Form> de next/form : la soumission met à jour l'URL
