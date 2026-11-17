@@ -4,11 +4,10 @@ import 'server-only';
 import { cookies } from 'next/headers';
 
 const COOKIE = 'auth_token';
-const ROLES_ADMIN = ['administrator', 'shop_manager'];
 
 const wordpressUrl = () => (process.env.WC_URL || '').replace(/\/+$/, '');
 
-// Utilisateur connecté { id, email, first_name, last_name, roles }, ou null.
+// Utilisateur connecté { id, email, first_name, last_name }, ou null.
 export async function getUtilisateurConnecte() {
   const token = (await cookies()).get(COOKIE)?.value;
   if (!token) return null;
@@ -26,15 +25,10 @@ export async function getUtilisateurConnecte() {
       email: data.email,
       first_name: data.first_name || '',
       last_name: data.last_name || '',
-      roles: Array.isArray(data.roles) ? data.roles : [],
     };
   } catch {
     return null;
   }
-}
-
-export function estAdmin(utilisateur) {
-  return !!utilisateur?.roles.some((role) => ROLES_ADMIN.includes(role));
 }
 
 // Échange email + mot de passe contre un token JWT (ou null si refusé).

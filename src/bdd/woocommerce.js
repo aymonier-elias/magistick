@@ -11,7 +11,7 @@ function getWooCommerce() {
 
   if (!WC_URL || !WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
     throw new Error(
-      'Configuration WooCommerce manquante : vérifie WC_URL, WC_CONSUMER_KEY et WC_CONSUMER_SECRET.'
+      'Configuration WooCommerce manquante : vérifiez WC_URL, WC_CONSUMER_KEY et WC_CONSUMER_SECRET.'
     );
   }
 

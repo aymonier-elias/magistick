@@ -1,11 +1,9 @@
 'use server';
 
 // Server Actions des formulaires de connexion / inscription / déconnexion.
-// Elles remplacent les routes /api/auth/*.
 //
 // ATTENTION : toute fonction exportée ici est appelable par n'importe qui
-// (requête POST directe). N'y mettez jamais d'action admin sans vérifier
-// estAdmin(await getUtilisateurConnecte()) au début.
+// (requête POST directe). N'y mettez que des actions publiques.
 
 import { randomUUID } from 'node:crypto';
 import { redirect } from 'next/navigation';
