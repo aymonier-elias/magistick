@@ -3,6 +3,7 @@
 // À appeler depuis un Server Component : const { produits } = await getCatalogue(filtres);
 import 'server-only';
 import { wc } from './woocommerce';
+import { urlModele3d } from './modeles3d';
 
 // Valeurs acceptées pour le filtre de disponibilité
 export const DISPONIBILITES = {
@@ -56,6 +57,7 @@ function parametresFiltres({ recherche, categorie, prixMin, prixMax, disponibili
 }
 
 // Produits publiés, paginés et filtrés. Ne lance jamais d'erreur : renvoie { produits, erreur }.
+// Chaque produit reçoit un champ modele3d : URL de son modèle 3D, ou null (voir modeles3d.js).
 // Exemple : await getCatalogue({ prixMax: 80, attribut: { slug: 'pa_type_magie', terme: 12 } })
 export async function getCatalogue({ page = 1, parPage = 20, ...filtres } = {}) {
   const params = {
@@ -66,7 +68,10 @@ export async function getCatalogue({ page = 1, parPage = 20, ...filtres } = {}) 
 
   try {
     const produits = await wc((api) => api.get('products', params));
-    return { produits, erreur: null };
+    return {
+      produits: produits.map((p) => ({ ...p, modele3d: urlModele3d(p.sku) })),
+      erreur: null,
+    };
   } catch (e) {
     console.error('Erreur catalogue :', e);
     return { produits: [], erreur: 'Impossible de récupérer les produits.' };

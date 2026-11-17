@@ -8,12 +8,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Précharge le modèle dès l'import du fichier — change le chemin selon ton arborescence
-useGLTF.preload("/object3D/arbre+sceptre/sceptre_lunaire_metallique.glb");
+const MODELE = "/object3D/sceptre_aquatique/sceptre_aquatique.glb";
+
+// Précharge le modèle dès l'import du fichier
+useGLTF.preload(MODELE);
 
 function Modele({ height }) {
   const groupRef = useRef(null);
-  const { scene } = useGLTF("/object3D/Sceptre_Royal_Cyan_Dore/sceptre_royal_cyan_dore.glb");
+  const { scene } = useGLTF(MODELE);
 
   useEffect(() => {
     if (!groupRef.current) return;

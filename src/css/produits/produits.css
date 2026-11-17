@@ -42,3 +42,19 @@
 .imageProduit img {
     width: 100%;
 }
+
+/* Aperçu 3D des cartes du catalogue (ou placeholder si pas de modèle) */
+.apercu3d {
+    width: 250px;
+    height: 250px;
+}
+
+.apercu3d-vide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed currentColor;
+    border-radius: 12px;
+    opacity: 0.6;
+    text-align: center;
+}

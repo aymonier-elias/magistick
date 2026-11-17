@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Apercu3D from "./Apercu3D";
 
 // Texte brut à partir du HTML renvoyé par WooCommerce (balises retirées, entités décodées)
 const ENTITES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
@@ -14,17 +15,14 @@ function texteBrut(html) {
 export default function ProduitCard({ produit }) {
     return (
         <article className="produit" >
-            {
-                produit.images?.length > 0 ? (
-                    <img
-                        src={produit.images[0].src}
-                        alt={produit.images[0].alt || produit.name}
-                        width="250"
-                    />
-                ) : (
-                    <p>Aucune image disponible</p>
-                )
-            }
+            {/* Présentation : modèle 3D du produit, sinon placeholder */}
+            {produit.modele3d ? (
+                <Apercu3D url={produit.modele3d} nom={produit.name} />
+            ) : (
+                <div className="apercu3d apercu3d-vide">
+                    <span>Aperçu 3D bientôt disponible</span>
+                </div>
+            )}
             <h2><Link href={`/catalogue/${produit.id}`}>{produit.name}</Link></h2>
             <p>
                 {produit.short_description
