@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import DOMPurify from 'isomorphic-dompurify';
+import sanitizeHtml from 'sanitize-html';
 import { getProduitPublie } from '@/bdd/produits';
 import '@/css/produits/produits.css';
 
@@ -9,12 +9,16 @@ export default async function Produit({ params }) {
   const produit = await getProduitPublie(id);
   if (!produit) notFound();
 
-  // La description vient de WooCommerce en HTML : on la nettoie avant de l'afficher
-  const descriptionClean = DOMPurify.sanitize(produit.description, {
-    USE_PROFILES: { html: true },
-    FORBID_TAGS: ["style", "form", "input", "button", "textarea", "select"],
-    FORBID_ATTR: ["style"],
-    ALLOW_DATA_ATTR: false,
+  // La description vient de WooCommerce en HTML : on la nettoie avant de l'afficher.
+  // sanitize-html n'utilise pas jsdom (qui exige une version récente de Node sur le serveur).
+  // Par défaut : pas de <script>, <style>, formulaires, attributs style / on* / data-*.
+  const descriptionClean = sanitizeHtml(produit.description, {
+    allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+    allowedAttributes: {
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'width', 'height'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
   });
 
   const image = produit.images[0];
