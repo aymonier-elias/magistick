@@ -1,8 +1,10 @@
+.zone-resultats{
+    width: 80%;
+}
 #resultatCatalogue{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    width: 80%;
 }
 .resultatBaguette{
     border: 1px solid white;
