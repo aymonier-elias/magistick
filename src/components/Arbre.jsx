@@ -59,7 +59,7 @@ function Modele({ height }) {
 
 export default function Baton() {
   return (
-    <div style={{ position: "fixed", inset: 0}}>
+    <div style={{ position: "fixed", inset: 0, zIndex: -1}}>
       <Canvas camera={{ position: [0, 0, 10] }}>
         <ambientLight intensity={1} />
         <directionalLight position={[5, 5, 5]} intensity={1} />

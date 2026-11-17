@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Input({ label, name, type = "text", required = false }) {
+export default function Input({ label, name, type = "text", required = false, disabled = false }) {
     let [visible, setVisible] = useState(true);
 
     if (type === "password") {
@@ -10,7 +10,7 @@ export default function Input({ label, name, type = "text", required = false }) 
                     {label}
                     <span className="champ-mdp">
                         <input type={visible ? type : "text"} name={name} autoComplete="current-password" required={required} />
-                        <button className="afficher" onClick={() => setVisible((current) => !current)}>Afficher</button>
+                        <button type="button" className="afficher" onClick={() => setVisible((current) => !current)}>{visible ? "Afficher" : "Masquer"}</button>
                     </span>
                 </label>
                 <div className="mdp-oublie">
@@ -21,7 +21,7 @@ export default function Input({ label, name, type = "text", required = false }) 
     }
     if (type === "submit") {
         return (
-            <button type="submit" className="btn-principal">{label}</button>
+            <button type="submit" className="btn-principal" disabled={disabled}>{label}</button>
         );
     }
 

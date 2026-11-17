@@ -1,6 +1,9 @@
+"use client";
+
 import Arbre from "@/components/Arbre";
 
 export default function Home() {
+
   return (
     <>
       <h1>Magistick</h1>
@@ -19,7 +22,7 @@ export default function Home() {
           <li>Fonctionnalité 1</li>
           <li>Fonctionnalité 2</li>
           <li>ça me casse les couille le ssh</li>
-          <li>Fonctionnalité 4</li>
+          <li>Nique ta race le ssh</li>
         </ul>
       </section>
 

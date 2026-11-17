@@ -1,0 +1,44 @@
+.zone-resultats {
+    width: 80%;
+}
+
+#resultatCatalogue {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.resultatBaguette {
+    border: 1px solid white;
+    border-radius: 16px;
+    height: 400px;
+    width: 300px;
+    text-align: center;
+}
+
+.filtres-catalogue {
+    display: flex;
+    margin-top: 20px;
+}
+
+.filtres {
+    width: 20%;
+    border: 1px solid white;
+}
+
+.barreRecherche {
+    margin-left: 100px;
+}
+
+.resultatProduit {
+    display: flex;
+    justify-content: space-around;
+}
+
+.imageProduit {
+    width: 40%;
+}
+
+.imageProduit img {
+    width: 100%;
+}

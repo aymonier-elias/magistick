@@ -10,9 +10,6 @@
     --gris: #BDB8D6;
     --bordure: rgba(248, 247, 244, 0.2);
     --bordure-douce: rgba(248, 247, 244, 0.12);
-
-    --titre: 'Orbitron', sans-serif;
-    --texte: 'Fira Sans', sans-serif;
 }
 
 * {
@@ -25,7 +22,11 @@ body {
     margin: 0;
     background: var(--nuit);
     color: var(--blanc);
-    font-family: var(--texte);
+    font-family: var(--average-sans);
     font-size: 16px;
     line-height: 1.6;
+}
+
+h1 {
+    font-family: var(--audiowide);
 }
