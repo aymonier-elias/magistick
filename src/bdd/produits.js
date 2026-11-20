@@ -2,7 +2,7 @@
 // Les produits se créent / modifient / suppriment directement dans WooCommerce.
 // À appeler depuis un Server Component : const { produits } = await getCatalogue(filtres);
 import 'server-only';
-import { wc } from './woocommerce';
+import { wc, wcAvecTotal } from './woocommerce';
 import { urlModele3d } from './modeles3d';
 
 // Valeurs acceptées pour le filtre de disponibilité
@@ -56,7 +56,10 @@ function parametresFiltres({ recherche, categorie, prixMin, prixMax, disponibili
   return params;
 }
 
-// Produits publiés, paginés et filtrés. Ne lance jamais d'erreur : renvoie { produits, erreur }.
+// Produits publiés, paginés et filtrés. Ne lance jamais d'erreur.
+// Renvoie { produits, total, totalPages, erreur } :
+//   total      nombre de produits correspondant aux filtres (toutes pages confondues)
+//   totalPages nombre de pages
 // Chaque produit reçoit un champ modele3d : URL de son modèle 3D (champ WooCommerce
 // « modele_3d », sinon public/), ou null (voir modeles3d.js).
 // Exemple : await getCatalogue({ prixMax: 80, attribut: { slug: 'pa_type_magie', terme: 12 } })
@@ -68,15 +71,25 @@ export async function getCatalogue({ page = 1, parPage = 20, ...filtres } = {}) 
   };
 
   try {
-    const produits = await wc((api) => api.get('products', params));
+    const { data, total, totalPages } = await wcAvecTotal((api) => api.get('products', params));
     return {
-      produits: produits.map((p) => ({ ...p, modele3d: urlModele3d(p) })),
+      produits: data.map((p) => ({ ...p, modele3d: urlModele3d(p) })),
+      total,
+      totalPages,
       erreur: null,
     };
   } catch (e) {
     console.error('Erreur catalogue :', e);
-    return { produits: [], erreur: 'Impossible de récupérer les produits.' };
+    return { produits: [], total: 0, totalPages: 0, erreur: 'Impossible de récupérer les produits.' };
   }
+}
+
+// Prix le plus élevé du catalogue (borne du curseur « Prix max »), ou 0.
+async function prixLePlusHaut() {
+  const [produit] = await wc((api) =>
+    api.get('products', { status: 'publish', orderby: 'price', order: 'desc', per_page: 1, _fields: 'price' })
+  );
+  return Math.ceil(Number(produit?.price) || 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -116,8 +129,9 @@ async function listerAttributs() {
 // La valeur actuellement choisie reste toujours proposée (même à 0).
 //
 // Renvoie {
-//   categories: [{ id, nom, nombre }],
-//   attributs:  [{ slug, nom, termes: [{ id, nom, nombre }] }],
+//   categories:  [{ id, nom, nombre }],
+//   attributs:   [{ slug, nom, termes: [{ id, nom, nombre }] }],
+//   prixMaximum: prix le plus élevé du catalogue (borne du curseur de prix)
 // }
 // Renvoie des listes vides en cas d'erreur (le catalogue reste utilisable).
 export async function getFiltresDisponibles(filtres = {}) {
@@ -126,10 +140,11 @@ export async function getFiltresDisponibles(filtres = {}) {
     const paramsSansAttribut = parametresFiltres({ ...filtres, attribut: undefined });
     const memesParams = JSON.stringify(paramsSansCategorie) === JSON.stringify(paramsSansAttribut);
 
-    const [pourCategories, pourAttributs, attributs] = await Promise.all([
+    const [pourCategories, pourAttributs, attributs, prixMaximum] = await Promise.all([
       tousLesProduits(paramsSansCategorie),
       memesParams ? null : tousLesProduits(paramsSansAttribut),
       listerAttributs(),
+      prixLePlusHaut(),
     ]);
 
     // Catégories
@@ -167,10 +182,11 @@ export async function getFiltresDisponibles(filtres = {}) {
           .map((t) => ({ id: t.id, nom: t.name, nombre: nombres.get(`${a.id}:${t.name}`) ?? 0 }))
           .filter((t) => t.nombre > 0 || (filtres.attribut?.slug === a.slug && t.id === termeChoisi)),
       })),
+      prixMaximum,
     };
   } catch (e) {
     console.error('Erreur filtres disponibles :', e);
-    return { categories: [], attributs: [] };
+    return { categories: [], attributs: [], prixMaximum: 0 };
   }
 }
 

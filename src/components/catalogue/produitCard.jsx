@@ -1,20 +1,28 @@
 import Link from "next/link";
 import Apercu3D from "./Apercu3D";
 
-// Texte brut à partir du HTML renvoyé par WooCommerce (balises retirées, entités décodées)
-const ENTITES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
-function texteBrut(html) {
-    return html
-        .replace(/<[^>]*>/g, "")
-        .replace(/&#(x[0-9a-f]+|\d+);/gi, (_, code) =>
-            String.fromCodePoint(code[0].toLowerCase() === "x" ? parseInt(code.slice(1), 16) : Number(code)))
-        .replace(/&([a-z]+);/gi, (entite, nom) => ENTITES[nom.toLowerCase()] ?? entite)
-        .trim();
+const formatPrix = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+// Note sur 5 en étoiles pleines / vides (ex. 3,6 -> ★★★★☆)
+function Etoiles({ note, nombreAvis }) {
+    const pleines = Math.round(Number(note) || 0);
+    return (
+        <span className="carte-etoiles" title={nombreAvis ? `${note} / 5 (${nombreAvis} avis)` : "Pas encore d'avis"}>
+            {"★".repeat(pleines)}{"☆".repeat(5 - pleines)}
+        </span>
+    );
 }
 
+// Carte produit du catalogue :
+// badge de puissance, aperçu 3D (ou placeholder), nom, prix, note, bouton.
 export default function ProduitCard({ produit }) {
+    const lien = `/catalogue/${produit.id}`;
+    const puissance = produit.categories?.[0]?.name;
+
     return (
-        <article className="produit" >
+        <article className="carte-produit">
+            {puissance && <span className="carte-badge">{puissance}</span>}
+
             {/* Présentation : modèle 3D du produit, sinon placeholder */}
             {produit.modele3d ? (
                 <Apercu3D url={produit.modele3d} nom={produit.name} />
@@ -23,36 +31,21 @@ export default function ProduitCard({ produit }) {
                     <span>Aperçu 3D bientôt disponible</span>
                 </div>
             )}
-            <h2><Link href={`/catalogue/${produit.id}`}>{produit.name}</Link></h2>
-            <p>
-                {produit.short_description
-                    ? texteBrut(produit.short_description)
-                    : "Aucune description disponible."}
-            </p>
-            <p>
-                {produit.price
-                    ? `${produit.price} €`
-                    : "Prix non renseigné"}
-            </p>
-            <p>
-                Catégorie : {produit.categories?.map((categorie) => categorie.name).join(", ")}
-            </p>
-            {/* Attributs visibles, ex. « Type de magie : Céleste » */}
-            {produit.attributes
-                ?.filter((attribut) => attribut.visible && attribut.options?.length > 0)
-                .map((attribut) => (
-                    <p key={attribut.id || attribut.name}>
-                        {attribut.name} : {attribut.options.join(", ")}
-                    </p>
-                ))}
-            <p>
-                Disponibilité :{" "}
-                {produit.stock_status === "instock"
-                    ? "En stock"
-                    : produit.stock_status === "outofstock"
-                        ? "Indisponible"
-                        : "En attente"}
-            </p>
-        </article >
+
+            <h2 className="carte-nom">
+                <Link href={lien}>{produit.name}</Link>
+            </h2>
+
+            <div className="carte-ligne">
+                <span className="carte-prix">
+                    {produit.price ? formatPrix.format(Number(produit.price)) : "Prix non renseigné"}
+                </span>
+                <Etoiles note={produit.average_rating} nombreAvis={produit.rating_count} />
+            </div>
+
+            {produit.stock_status === "outofstock" && <p className="carte-indisponible">Indisponible</p>}
+
+            <Link href={lien} className="carte-bouton">Voir le produit</Link>
+        </article>
     );
 }

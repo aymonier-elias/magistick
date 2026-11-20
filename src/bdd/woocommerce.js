@@ -29,9 +29,20 @@ function getWooCommerce() {
 // En cas de refus, lance une erreur avec .status et .code.
 // Exemple : wc((api) => api.get('products', { per_page: 10 }))
 export async function wc(requete) {
+  return (await wcAvecTotal(requete)).data;
+}
+
+// Comme wc(), mais renvoie aussi le nombre total de résultats et de pages
+// (en-têtes X-WP-Total et X-WP-TotalPages des listes paginées).
+// Exemple : const { data, total, totalPages } = await wcAvecTotal((api) => api.get('products'))
+export async function wcAvecTotal(requete) {
   try {
-    const { data } = await requete(getWooCommerce());
-    return data;
+    const { data, headers } = await requete(getWooCommerce());
+    return {
+      data,
+      total: Number(headers?.['x-wp-total']) || 0,
+      totalPages: Number(headers?.['x-wp-totalpages']) || 0,
+    };
   } catch (e) {
     const status = e.response?.status;
     const erreur = new Error(

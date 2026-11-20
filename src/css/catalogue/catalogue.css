@@ -1,33 +1,188 @@
-.zone-resultats {
-    width: 80%;
-}
+/* =========================================================================
+   Catalogue — disposition uniquement (pas de style visuel)
+   ========================================================================= */
 
-#resultatCatalogue {
+/* Filtres à gauche, résultats à droite */
+.catalogue-corps {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.resultatBaguette {
-    border: 1px solid white;
-    border-radius: 16px;
-    height: 400px;
-    width: 300px;
-    text-align: center;
-}
-
-.filtres-catalogue {
-    display: flex;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    align-items: start;
     margin-top: 20px;
 }
 
+/* ----- Colonne de filtres ----- */
+
 .filtres {
-    width: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px;
     border: 1px solid white;
 }
 
-.barreRecherche {
-    margin-left: 100px;
+.groupe-filtre {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
+
+.groupe-filtre legend {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.groupe-filtre ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Choix : bouton + libellé à gauche, nombre de produits à droite */
+.groupe-filtre label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.groupe-filtre-libelle {
+    flex: 1;
+}
+
+.groupe-filtre-nombre {
+    opacity: 0.6;
+    font-size: 0.85em;
+}
+
+.curseur-prix input {
+    width: 100%;
+}
+
+.curseur-prix-bornes {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+}
+
+.bouton-reinitialiser {
+    display: block;
+    text-align: center;
+}
+
+/* ----- Colonne de résultats ----- */
+
+.catalogue-recherche {
+    display: flex;
+    gap: 8px;
+}
+
+.catalogue-compte {
+    margin: 12px 0;
+}
+
+/* Grille de 3 cartes par ligne */
+#resultatCatalogue {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* ----- Carte produit ----- */
+
+.carte-produit {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid white;
+    border-radius: 16px;
+}
+
+/* Badge de puissance en haut à gauche, par-dessus l'aperçu */
+.carte-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+}
+
+.carte-nom {
+    margin: 0;
+}
+
+/* Prix à gauche, note à droite */
+.carte-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.carte-indisponible {
+    margin: 0;
+}
+
+/* Bouton pleine largeur en bas de la carte */
+.carte-bouton {
+    display: block;
+    margin-top: auto;
+    text-align: center;
+}
+
+/* Aperçu 3D (ou placeholder) : carré, pleine largeur de la carte */
+.apercu3d {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.apercu3d-vide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed currentColor;
+    border-radius: 12px;
+    opacity: 0.6;
+    text-align: center;
+}
+
+/* ----- Pagination centrée ----- */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0;
+}
+
+.pagination-actuelle {
+    font-weight: bold;
+}
+
+/* Écrans étroits : filtres au-dessus, 2 puis 1 carte par ligne */
+@media (max-width: 900px) {
+    .catalogue-corps {
+        grid-template-columns: 1fr;
+    }
+
+    #resultatCatalogue {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    #resultatCatalogue {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================================
+   Fiche produit
+   ========================================================================= */
 
 .resultatProduit {
     display: flex;
@@ -40,20 +195,4 @@
 
 .imageProduit img {
     width: 100%;
-}
-
-/* Aperçu 3D des cartes du catalogue (ou placeholder si pas de modèle) */
-.apercu3d {
-    width: 250px;
-    height: 250px;
-}
-
-.apercu3d-vide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed currentColor;
-    border-radius: 12px;
-    opacity: 0.6;
-    text-align: center;
 }
