@@ -23,42 +23,49 @@ export default async function Produit({ params }) {
 
   const image = produit.images[0];
 
+  console.log(produit);
+
   return (
-    <div className="resultatProduit">
+    <div>
+      <h1 className="titreProduit">{produit.name}</h1>
+      <div className="resultatProduit">
 
-      <div className="imageProduit">
-        {image ? (
-          <img src={image.src} alt={image.alt || produit.name} />
-        ) : (
-          <p>Aucune image disponible</p>
-        )}
-      </div>
+        <div className="imageProduit">
+          {image ? (
+            <img src={image.src} alt={image.alt || produit.name} />
+          ) : (
+            <p>Aucune image disponible</p>
+          )}
+        </div>
 
-      <div className="infosProduit">
-        <h1>{produit.name}</h1>
-        <div>{produit.price} €</div>
-        <div dangerouslySetInnerHTML={{ __html: descriptionClean }} />
+        <div className="infosProduit">
 
-        {/* Vérification des attributs et affichage */}
-        <div className="attributsProduits">{produit.attributes.length > 0 ? (
-          produit.attributes.map(attribut => (
-            <div key={attribut.id || attribut.name}>
-              {attribut.name}
+          <span>Description</span>
+          <div dangerouslySetInnerHTML={{ __html: descriptionClean }} />
 
-              {/* Vérification des options et affichage */}
-              {attribut.options.length > 0 ? (
-                <div>
-                  <ul>
-                    {attribut.options.map(option => (
-                      <li key={option}>{option}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : ("")}
+          {/* Vérification des attributs et affichage */}
+          <div className="attributsProduits">{produit.attributes.length > 0 ? (
+            produit.attributes.map(attribut => (
+              <div key={attribut.id || attribut.name}>
+                {attribut.name}
 
-            </div>
-          ))) : ("Aucun Attribut")
-        }</div>
+                {/* Vérification des options et affichage */}
+                {attribut.options.length > 0 ? (
+                  <div>
+                    <ul>
+                      {attribut.options.map(option => (
+                        <li key={option}>{option}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : ("")}
+
+              </div>
+            ))) : ("Aucun Attribut")
+          }</div>
+
+          <div>{produit.price} €</div>
+        </div>
       </div>
     </div>
   );

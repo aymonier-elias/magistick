@@ -43,12 +43,31 @@ export default async function Produits({ searchParams }) {
     const cleFiltres = JSON.stringify(filtres);
 
     return (
-        <div className="catalogue">
-            <h1>Le catalogue des baguettes</h1>
+        <div>
+            <div>
+                <h1>LA COLLECTION  </h1>
+            </div>
 
-            <div className="catalogue-corps">
-                {/* Colonne de gauche : filtres */}
-                <aside className="catalogue-filtres">
+            <div>
+                {/* Barre de recherche : met à jour l'URL (?recherche=...) */}
+                <Form action="/catalogue" key={cleFiltres}>
+                    {champsCaches(filtres, Object.keys(filtres).filter((nom) => nom !== "recherche"))}
+                    <label>
+                        <input className="barreRecherche" type="search" name="recherche" defaultValue={filtres.recherche} placeholder="Rechercher un sceptre..." />
+                    </label>
+                    <button type="submit">
+                        Rechercher
+                    </button>
+                    {Object.keys(filtres).length > 0 && (
+                        <p>
+                            {filtres.recherche && <>Recherche : {filtres.recherche} — </>}
+                            <Link href="/catalogue">Réinitialiser</Link>
+                        </p>
+                    )}
+                </Form>
+
+                {/* Bloc filtres + produits */}
+                <aside className="filtres-catalogue">
                     {/* Pas de key : l'ancien formulaire reste affiché pendant le calcul du nouveau */}
                     <Suspense fallback={<div className="filtres"><p>Filtres</p></div>}>
                         <FiltresProduits filtres={filtres} filtresCatalogue={filtresCatalogue} cle={cleFiltres} />
