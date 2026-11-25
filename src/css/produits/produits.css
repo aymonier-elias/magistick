@@ -1,19 +1,28 @@
+/* Page de catalogue */
+
 .zone-resultats {
     width: 80%;
 }
 
 #resultatCatalogue {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    row-gap: 64px;
+    margin: 24px;
 }
 
-.resultatBaguette {
-    border: 1px solid white;
+#resultatCatalogue>article {
+    background-color: #140D33;
+    padding: 12px;
     border-radius: 16px;
-    height: 400px;
-    width: 300px;
-    text-align: center;
+}
+
+.choixPage {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 24px;
 }
 
 .filtres-catalogue {
@@ -23,11 +32,29 @@
 
 .filtres {
     width: 20%;
-    border: 1px solid white;
+    background-color: #140D33;
+    border-radius: 16px;
+    height: fit-content;
+    padding: 8px;
+    padding-bottom: 24px;
 }
 
 .barreRecherche {
-    margin-left: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
+    width: 400px;
+    height: 32px;
+    border-radius: 32px;
+    border: none;
+    padding-left: 12px;
+    font-size: 16px;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Page produit singulier */
+
+.titreProduit {
+    font-size: 54px;
 }
 
 .resultatProduit {
@@ -37,8 +64,24 @@
 
 .imageProduit {
     width: 40%;
+    border: 1px solid white;
 }
 
-.imageProduit img {
+.imageProduit>img {
     width: 100%;
+}
+
+.infosProduit {
+    border: 1px solid white;
+    padding: 32px;
+    border-radius: 24px;
+}
+
+.attributsProduits {
+    border-top: 1px solid white;
+    margin: 8px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
 }

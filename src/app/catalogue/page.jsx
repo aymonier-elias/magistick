@@ -6,7 +6,7 @@ import ProduitCard from "@/components/catalogue/produitCard";
 
 import '@/css/produits/produits.css';
 
-const PAR_PAGE = 10;
+const PAR_PAGE = 12;
 const NOMS_FILTRES = ["recherche", "categorie", "prixMin", "prixMax", "disponibilite"];
 
 // Les formulaires utilisent <Form> de next/form : la soumission met à jour l'URL
@@ -43,15 +43,15 @@ export default async function Produits({ searchParams }) {
     return (
         <div>
             <div>
-                <h1>Le catalogue des baguettes</h1>
+                <h1>LA COLLECTION  </h1>
             </div>
 
             <div>
                 {/* Barre de recherche : met à jour l'URL (?recherche=...) */}
                 <Form action="/catalogue" key={cleFiltres}>
                     {champsCaches(filtres, Object.keys(filtres).filter((nom) => nom !== "recherche"))}
-                    <label>Tous les produits
-                        <input className="barreRecherche" type="search" name="recherche" defaultValue={filtres.recherche} />
+                    <label>
+                        <input className="barreRecherche" type="search" name="recherche" defaultValue={filtres.recherche} placeholder="Rechercher un sceptre..." />
                     </label>
                     <button type="submit">
                         Rechercher
@@ -169,10 +169,16 @@ async function ResultatsProduits({ filtres, filtresCatalogue, page }) {
                 )}
             </div>
 
-            <nav>
-                {page > 1 && <Link href={lienPage(page - 1)}>-</Link>}
+            <nav className="choixPage">
+                {page > 1 && 
+                <Link href={lienPage(page - 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+                </Link>}
                 <p>{page}</p>
-                {produits.length === PAR_PAGE && <Link href={lienPage(page + 1)}>+</Link>}
+                {produits.length === PAR_PAGE && 
+                <Link href={lienPage(page + 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+                </Link>}
             </nav>
         </div>
     );
