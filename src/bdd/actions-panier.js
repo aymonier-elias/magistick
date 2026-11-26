@@ -21,6 +21,7 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { modifierPanier, oublierPanier } from './panier';
+import { texte, EMAIL_VALIDE } from './utils';
 
 // Messages lisibles pour les erreurs courantes de la Store API
 const MESSAGES = {
@@ -87,9 +88,9 @@ export async function retirerDuPanier(cle) {
 
 // Appliquer / retirer un code promo (créé dans WooCommerce > Marketing > Codes promo)
 export async function appliquerCoupon(code) {
-  const texte = String(code ?? '').trim();
-  if (!texte) return { erreur: 'Saisissez un code promo.' };
-  return executer('cart/apply-coupon', { code: texte });
+  const valeur = String(code ?? '').trim();
+  if (!valeur) return { erreur: 'Saisissez un code promo.' };
+  return executer('cart/apply-coupon', { code: valeur });
 }
 
 export async function retirerCoupon(code) {
@@ -99,8 +100,6 @@ export async function retirerCoupon(code) {
 // ---------------------------------------------------------------------------
 // Commande
 // ---------------------------------------------------------------------------
-
-const texte = (formData, nom) => String(formData.get(nom) ?? '').trim();
 
 // Passer la commande (à utiliser avec useActionState).
 // Champs du formulaire : prenom, nom, email, telephone, adresse, complement,
@@ -121,7 +120,7 @@ export async function passerCommande(etatPrecedent, formData) {
 
   const manquants = ['first_name', 'last_name', 'address_1', 'postcode', 'city'].filter((c) => !adresse[c]);
   if (manquants.length || !email) return { erreur: 'Merci de remplir tous les champs obligatoires.' };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { erreur: 'Adresse email invalide.' };
+  if (!EMAIL_VALIDE.test(email)) return { erreur: 'Adresse email invalide.' };
 
   let commande;
   try {

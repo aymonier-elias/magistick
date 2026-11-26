@@ -1,30 +1,34 @@
 /* =========================================================================
-   Catalogue — disposition uniquement (pas de style visuel)
+   Page catalogue — filtres, recherche, grille de cartes produit, pagination
    ========================================================================= */
 
 /* Filtres à gauche, résultats à droite */
 .catalogue-corps {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 240px 1fr;
     gap: 24px;
     align-items: start;
     margin-top: 20px;
 }
 
+/* min-width : la grille peut rétrécir (sinon les canvas 3D l'élargissent) */
+.catalogue-resultats {
+    min-width: 0;
+}
+
 /* ----- Colonne de filtres ----- */
 
-.filtres {
+.catalogue-filtres {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 16px;
-    border: 1px solid white;
+    padding: 16px 16px 24px;
+    background-color: #140D33;
+    border-radius: 16px;
 }
 
 .groupe-filtre {
     border: 0;
-    margin: 0;
-    padding: 0;
 }
 
 .groupe-filtre legend {
@@ -36,8 +40,6 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin: 0;
-    padding: 0;
     list-style: none;
 }
 
@@ -80,15 +82,27 @@
     gap: 8px;
 }
 
+.catalogue-recherche input {
+    flex: 1;
+    max-width: 400px;
+    height: 32px;
+    padding-left: 12px;
+    border: none;
+    border-radius: 32px;
+    font-size: 16px;
+}
+
 .catalogue-compte {
     margin: 12px 0;
 }
 
 /* Grille de 3 cartes par ligne */
-#resultatCatalogue {
+.catalogue-grille {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 24px;
+    row-gap: 64px;
+    margin: 24px 0;
 }
 
 /* ----- Carte produit ----- */
@@ -99,7 +113,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 12px;
-    border: 1px solid white;
+    background-color: #140D33;
     border-radius: 16px;
 }
 
@@ -111,19 +125,11 @@
     z-index: 1;
 }
 
-.carte-nom {
-    margin: 0;
-}
-
 /* Prix à gauche, note à droite */
 .carte-ligne {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.carte-indisponible {
-    margin: 0;
 }
 
 /* Bouton pleine largeur en bas de la carte */
@@ -163,36 +169,20 @@
     font-weight: bold;
 }
 
-/* Écrans étroits : filtres au-dessus, 2 puis 1 carte par ligne */
+/* ----- Écrans étroits : filtres au-dessus, 2 puis 1 carte par ligne ----- */
+
 @media (max-width: 900px) {
     .catalogue-corps {
         grid-template-columns: 1fr;
     }
 
-    #resultatCatalogue {
+    .catalogue-grille {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 560px) {
-    #resultatCatalogue {
+    .catalogue-grille {
         grid-template-columns: 1fr;
     }
-}
-
-/* =========================================================================
-   Fiche produit
-   ========================================================================= */
-
-.resultatProduit {
-    display: flex;
-    justify-content: space-around;
-}
-
-.imageProduit {
-    width: 40%;
-}
-
-.imageProduit img {
-    width: 100%;
 }

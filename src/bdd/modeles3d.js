@@ -10,6 +10,8 @@
 //
 // 2. En secours, le site : public/object3D/<sku>/<sku>.glb
 //    où <sku> est le SKU WooCommerce du produit (ex. sceptre_lune).
+//    Seul le .glb va dans public/ (tout ce qui s'y trouve est téléchargeable) :
+//    les sources (.blend, textures, aperçus) sont rangées dans assets-3d/.
 //
 // Dans les deux cas, optimiser le modèle avant de l'ajouter :
 //   npx @gltf-transform/cli@4.5.1 optimize entree.glb sortie.glb \

@@ -2,6 +2,8 @@
 // Les produits se créent / modifient / suppriment directement dans WooCommerce.
 // À appeler depuis un Server Component : const { produits } = await getCatalogue(filtres);
 import 'server-only';
+import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import { wc, wcAvecTotal } from './woocommerce';
 import { urlModele3d } from './modeles3d';
 
@@ -84,13 +86,20 @@ export async function getCatalogue({ page = 1, parPage = 20, ...filtres } = {}) 
   }
 }
 
+// Données qui changent rarement (attributs, prix max) : gardées en cache entre
+// les requêtes au lieu d'interroger WooCommerce à chaque changement de filtre.
+// Pour forcer la mise à jour : revalidateTag(TAG_CATALOGUE).
+// (Next 16 recommande « use cache », qui exige d'activer cacheComponents.)
+export const TAG_CATALOGUE = 'catalogue';
+const CACHE_CATALOGUE = { revalidate: 3600, tags: [TAG_CATALOGUE] };
+
 // Prix le plus élevé du catalogue (borne du curseur « Prix max »), ou 0.
-async function prixLePlusHaut() {
+const prixLePlusHaut = unstable_cache(async () => {
   const [produit] = await wc((api) =>
     api.get('products', { status: 'publish', orderby: 'price', order: 'desc', per_page: 1, _fields: 'price' })
   );
   return Math.ceil(Number(produit?.price) || 0);
-}
+}, ['prix-le-plus-haut'], CACHE_CATALOGUE);
 
 // ---------------------------------------------------------------------------
 // Filtres disponibles (qui s'adaptent entre eux)
@@ -109,7 +118,7 @@ async function tousLesProduits(params) {
 }
 
 // Attributs globaux et tous leurs termes (pour retrouver l'ID d'un terme depuis son nom)
-async function listerAttributs() {
+const listerAttributs = unstable_cache(async () => {
   const attributs = await wc((api) => api.get('products/attributes'));
   return Promise.all(
     attributs.map(async (a) => ({
@@ -117,11 +126,11 @@ async function listerAttributs() {
       slug: a.slug,
       nom: a.name,
       termes: await wc((api) =>
-        api.get(`products/attributes/${a.id}/terms`, { per_page: 100, orderby: 'name' })
+        api.get(`products/attributes/${a.id}/terms`, { per_page: 100, orderby: 'name', _fields: 'id,name' })
       ),
     }))
   );
-}
+}, ['attributs-produits'], CACHE_CATALOGUE);
 
 // Options des menus de filtres, calculées selon les AUTRES filtres choisis :
 // si « Eau » est choisi, seules les catégories contenant de l'eau sont proposées, et inversement.
@@ -191,12 +200,14 @@ export async function getFiltresDisponibles(filtres = {}) {
 }
 
 // Un produit publié, ou null s'il n'existe pas / n'est pas publié.
-export async function getProduitPublie(id) {
+// React.cache : la page et generateMetadata partagent le même appel pendant une requête.
+export const getProduitPublie = cache(async (id) => {
+  if (!/^\d+$/.test(String(id))) return null;
   try {
-    const produit = await wc((api) => api.get(`products/${encodeURIComponent(id)}`));
+    const produit = await wc((api) => api.get(`products/${id}`));
     return produit.status === 'publish' ? produit : null;
   } catch (e) {
     if (e.status === 404 || e.status === 400) return null;
     throw e;
   }
-}
+});

@@ -9,13 +9,12 @@ import { randomUUID } from 'node:crypto';
 import { redirect } from 'next/navigation';
 import { creerClient } from './clients';
 import { demanderToken, ouvrirSession, fermerSession } from './auth';
+import { texte, EMAIL_VALIDE } from './utils';
 
 const EMAIL_DEJA_UTILISE = [
   'registration-error-email-exists',
   'woocommerce_rest_customer_invalid_email',
 ];
-
-const texte = (formData, nom) => String(formData.get(nom) ?? '').trim();
 
 // Utilisé avec useActionState : renvoie { erreur } ou redirige vers l'accueil.
 export async function connexion(etatPrecedent, formData) {
@@ -46,7 +45,7 @@ export async function inscription(etatPrecedent, formData) {
   const mdp = String(formData.get('mdp') ?? '');
 
   if (!prenom || !nom || !email || !mdp) return { erreur: 'Tous les champs sont obligatoires.' };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { erreur: 'Adresse email invalide.' };
+  if (!EMAIL_VALIDE.test(email)) return { erreur: 'Adresse email invalide.' };
   if (mdp.length < 8) return { erreur: 'Le mot de passe doit contenir au moins 8 caractères.' };
 
   // Identifiant WordPress unique, dérivé de l'email

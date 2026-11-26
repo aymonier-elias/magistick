@@ -13,11 +13,12 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { wc } from './woocommerce';
+import { urlWordPress, optionsCookie } from './utils';
 
 const COOKIE = 'panier_token';
 const DUREE_COOKIE = 60 * 60 * 24 * 2; // 48 h, comme la session WooCommerce
 
-const urlStoreApi = () => `${(process.env.WC_URL || '').replace(/\/+$/, '')}/wp-json/wc/store/v1`;
+const urlStoreApi = () => `${urlWordPress()}/wp-json/wc/store/v1`;
 
 // ---------------------------------------------------------------------------
 // Appel à la Store API
@@ -53,13 +54,7 @@ async function storeApi(route, { method = 'GET', body } = {}) {
 // Garde le jeton du panier dans le cookie (Server Actions uniquement)
 async function enregistrerToken(token) {
   if (!token) return;
-  (await cookies()).set(COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: DUREE_COOKIE,
-  });
+  (await cookies()).set(COOKIE, token, optionsCookie(DUREE_COOKIE));
 }
 
 // ---------------------------------------------------------------------------
