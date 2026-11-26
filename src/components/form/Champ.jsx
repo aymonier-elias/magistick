@@ -1,36 +1,53 @@
+"use client";
+
+// Champs de formulaire réutilisables.
+
 import { useState } from "react";
+import styles from "@/css/form/champs.module.css";
 
-export default function Input({ label, name, type = "text", required = false, disabled = false }) {
-    let [visible, setVisible] = useState(true);
-
-    if (type === "password") {
-        return (
-            <>
-                <label className="champ">
-                    {label}
-                    <span className="champ-mdp">
-                        <input type={visible ? type : "text"} name={name} autoComplete="current-password" required={required} />
-                        <button type="button" className="afficher" onClick={() => setVisible((current) => !current)}>{visible ? "Afficher" : "Masquer"}</button>
-                    </span>
-                </label>
-                <div className="mdp-oublie">
-                    <a href="#">Mot de passe oublié ?</a>
-                </div>
-            </>
-        );
-    }
-    if (type === "submit") {
-        return (
-            <button type="submit" className="btn-principal" disabled={disabled}>{label}</button>
-        );
-    }
-
+// Champ texte / email / etc. avec son libellé
+export function Champ({ label, name, type = "text", autoComplete = name, required = false }) {
     return (
-        <label className="champ">
+        <label className={styles.champ}>
             {label}
-            <input type={type} name={name} autoComplete={name} required={required} />
+            <input type={type} name={name} autoComplete={autoComplete} required={required} />
         </label>
     );
-
 }
 
+// Mot de passe avec bouton Afficher / Masquer.
+// autoComplete : "current-password" (connexion) ou "new-password" (inscription).
+export function ChampMotDePasse({ label, name, autoComplete = "current-password", required = false }) {
+    const [affiche, setAffiche] = useState(false);
+
+    return (
+        <label className={styles.champ}>
+            {label}
+            <span className={styles.motDePasse}>
+                <input
+                    type={affiche ? "text" : "password"}
+                    name={name}
+                    autoComplete={autoComplete}
+                    required={required}
+                />
+                <button
+                    type="button"
+                    className={styles.afficher}
+                    onClick={() => setAffiche((actuel) => !actuel)}
+                    aria-pressed={affiche}
+                >
+                    {affiche ? "Masquer" : "Afficher"}
+                </button>
+            </span>
+        </label>
+    );
+}
+
+// Bouton d'envoi principal
+export function BoutonPrincipal({ children, disabled = false }) {
+    return (
+        <button type="submit" className={styles.boutonPrincipal} disabled={disabled}>
+            {children}
+        </button>
+    );
+}

@@ -1,22 +1,21 @@
-"use client";
+import DecorAccueil from "@/components/accueil/DecorAccueil";
 
-import Arbre from "@/components/Arbre";
+import "@/css/accueil/accueil.css";
 
-export default function Home() {
-
+export default function Accueil() {
   return (
     <>
       <h1>Magistick</h1>
-      <Arbre />
+      <DecorAccueil />
 
-      <section style={{ padding: "2rem" }}>
+      <section className="accueil-section">
         <h2>Teste des github action</h2>
         <p>
-          C'est mieux la ? Avec deux commit
+          C&apos;est mieux la ? Avec deux commit
         </p>
       </section>
 
-      <section style={{ padding: "2rem" }}>
+      <section className="accueil-section">
         <h2>Fonctionnalités</h2>
         <ul>
           <li>Fonctionnalité 1</li>
@@ -26,7 +25,7 @@ export default function Home() {
         </ul>
       </section>
 
-      <section style={{ padding: "2rem" }}>
+      <section className="accueil-section">
         <h2>Comment ça marche</h2>
         <p>
           Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -36,9 +35,9 @@ export default function Home() {
         </p>
       </section>
 
-      <section style={{ padding: "2rem", minHeight: "50vh" }}>
+      <section className="accueil-section accueil-contact">
         <h2>Contact</h2>
-        <p>N'hésitez pas à nous contacter pour plus d'informations.</p>
+        <p>N&apos;hésitez pas à nous contacter pour plus d&apos;informations.</p>
       </section>
     </>
   );

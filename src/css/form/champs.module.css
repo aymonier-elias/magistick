@@ -1,0 +1,83 @@
+/* =========================================================================
+   Champs de formulaire et bouton principal (components/form)
+   ========================================================================= */
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--gris);
+}
+
+.champ input {
+    min-width: 0;
+    height: 52px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: var(--indigo);
+    color: var(--blanc);
+    border: 1px solid var(--bordure);
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color .2s;
+}
+
+.champ input::placeholder {
+    color: rgba(189, 184, 214, 0.6);
+}
+
+/* Mot de passe : bouton « Afficher » posé dans le champ */
+.motDePasse {
+    position: relative;
+    display: flex;
+}
+
+.motDePasse input {
+    flex: 1 1 auto;
+    padding-right: 96px;
+}
+
+.afficher {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    height: 44px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--cyan);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.boutonPrincipal {
+    height: 58px;
+    border-radius: 29px;
+    border: none;
+    background: var(--rose);
+    color: var(--nuit);
+    font-family: var(--titre);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    box-shadow: 0 0 32px rgba(227, 92, 152, 0.5), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s;
+}
+
+.boutonPrincipal:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 44px rgba(227, 92, 152, 0.7), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
+}
+
+.boutonPrincipal:active {
+    transform: translateY(1px);
+}
+
+.boutonPrincipal:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}

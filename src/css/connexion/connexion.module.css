@@ -1,8 +1,15 @@
+/* =========================================================================
+   Page connexion / inscription (CSS Module : classes propres à cette page)
+   Les champs et le bouton principal sont dans css/form/champs.module.css.
+   ========================================================================= */
+
 .conteneur {
     min-height: 100vh;
     display: flex;
     flex-wrap: wrap;
 }
+
+/* ── Colonne de gauche : cercle magique + accroche ── */
 
 .gauche {
     flex: 1 1 600px;
@@ -25,7 +32,6 @@
     height: 0;
 }
 
-/* Accroche */
 .texte {
     position: relative;
     z-index: 2;
@@ -48,6 +54,8 @@
 .texte h1 span {
     color: var(--cyan);
 }
+
+/* ── Colonne de droite : formulaires ── */
 
 .droite {
     flex: 1 1 480px;
@@ -75,17 +83,12 @@
 .boite {
     width: 100%;
     max-width: 440px;
-
     display: flex;
     flex-direction: column;
     gap: 28px;
 }
 
-.partieconnexion {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-}
+/* ── Onglets Connexion / Inscription ── */
 
 .boutons {
     position: relative;
@@ -97,19 +100,24 @@
     border: 1px solid var(--bordure-douce);
 }
 
-.onglets {
+/* Pastille qui glisse sous l'onglet actif */
+.pastille {
     position: absolute;
     top: 4px;
     bottom: 4px;
+    left: 4px;
     width: calc(50% - 4px);
     border-radius: 24px;
     background: var(--rose);
     box-shadow: 0 0 24px rgba(227, 92, 152, 0.55);
-    transition: left .35s cubic-bezier(.6, .05, .3, 1);
+    transition: transform .35s cubic-bezier(.6, .05, .3, 1);
 }
 
-.connexion,
-.inscription {
+.pastilleDroite {
+    transform: translateX(100%);
+}
+
+.onglet {
     position: relative;
     z-index: 1;
     height: 48px;
@@ -128,12 +136,20 @@
     color: var(--nuit);
 }
 
+/* ── Formulaires ── */
 
-.partieconnexion {
+.formConnexion,
+.formInscription {
     display: flex;
     flex-direction: column;
+}
+
+.formConnexion {
     gap: 20px;
-    animation: arcRise .45s ease-out;
+}
+
+.formInscription {
+    gap: 18px;
 }
 
 .entete {
@@ -155,58 +171,13 @@
     color: var(--gris);
 }
 
-
-.champ {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--gris);
+.grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
-.champ input {
-    min-width: 0;
-    height: 52px;
-    padding: 0 16px;
-    border-radius: 14px;
-    background: var(--indigo);
-    color: var(--blanc);
-    border: 1px solid var(--bordure);
-    font-family: inherit;
-    font-size: 16px;
-    transition: border-color .2s;
-}
-
-.champ input::placeholder {
-    color: rgba(189, 184, 214, 0.6);
-}
-
-.champ input.invalide {
-    border-color: var(--rose);
-}
-
-.champ-mdp {
-    position: relative;
-    display: flex;
-}
-
-.champ-mdp input {
-    flex: 1 1 auto;
-    padding-right: 96px;
-}
-
-.afficher {
-    padding: 0 14px;
-    border: none;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--cyan);
-    font-family: inherit;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.mdp-oublie {
+.mdpOublie {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -215,51 +186,25 @@
     font-size: 14px;
 }
 
-.mdp-oublie a {
+.mdpOublie a {
     color: var(--cyan);
 }
 
-
-
-
-
-.btn-principal {
-    height: 58px;
-    border-radius: 29px;
-    border: none;
-    background: var(--rose);
-    color: var(--nuit);
-    font-family: var(--titre);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    box-shadow: 0 0 32px rgba(227, 92, 152, 0.5), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
-    cursor: pointer;
-    transition: transform .15s, box-shadow .2s;
-}
-
-.btn-principal:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 44px rgba(227, 92, 152, 0.7), inset 0 -3px 0 rgba(16, 26, 35, 0.18);
-}
-
-.btn-principal:active {
-    transform: translateY(1px);
-}
-
-
-.separateur {
+.accepter {
     display: flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--gris);
-    font-size: 13px;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 4px;
+    font-size: 14px;
 }
 
-.separateur span {
-    flex: 1 1 auto;
-    height: 1px;
-    background: rgba(248, 247, 244, 0.15);
+.accepter input {
+    margin-top: 3px;
+    accent-color: var(--rose);
+}
+
+.accepter a {
+    color: var(--cyan);
 }
 
 .bascule {
@@ -269,7 +214,7 @@
     font-size: 15px;
 }
 
-.lien-btn {
+.lienBtn {
     min-height: 44px;
     padding: 0 4px;
     border: none;
@@ -281,57 +226,11 @@
     cursor: pointer;
 }
 
-.lien-btn:hover {
+.lienBtn:hover {
     color: var(--rose-clair);
 }
 
-
-.accepter {
-    align-items: flex-start;
-    padding-top: 4px;
-}
-
-.accepter input {
-    margin-top: 3px;
-}
-
-.accepter a {
-    color: var(--cyan);
-}
-
-
-
-
-
-.partieinscription {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.grille {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.champ-mdp .afficher {
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    height: 44px;
-}
-
-.accepter {
-    display: flex;
-    gap: 10px;
-    font-size: 14px;
-}
-
-.accepter input {
-    margin-top: 3px;
-    accent-color: var(--rose);
-}
+/* ── Messages ── */
 
 .erreur {
     margin: 0;
@@ -354,15 +253,3 @@
     background: var(--indigo);
     border: 1px solid rgba(120, 238, 251, 0.35);
 }
-
-.succes h2 {
-    margin: 0;
-    font-family: var(--titre);
-    font-size: 30px;
-}
-
-.succes p {
-    margin: 0;
-    color: var(--gris);
-}
-

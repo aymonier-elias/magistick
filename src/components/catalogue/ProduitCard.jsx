@@ -1,7 +1,6 @@
 import Link from "next/link";
+import { formatPrix } from "@/utils/format";
 import Apercu3D from "./Apercu3D";
-
-const formatPrix = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
 // Note sur 5 en étoiles pleines / vides (ex. 3,6 -> ★★★★☆)
 function Etoiles({ note, nombreAvis }) {
@@ -38,7 +37,7 @@ export default function ProduitCard({ produit }) {
 
             <div className="carte-ligne">
                 <span className="carte-prix">
-                    {produit.price ? formatPrix.format(Number(produit.price)) : "Prix non renseigné"}
+                    {formatPrix(produit.price) ?? "Prix non renseigné"}
                 </span>
                 <Etoiles note={produit.average_rating} nombreAvis={produit.rating_count} />
             </div>

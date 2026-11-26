@@ -1,5 +1,21 @@
+// Les images produits sont hébergées par WordPress (médiathèque) : next/image
+// n'optimise que les domaines autorisés ici. WC_URL vient de .env.local.
+function imagesWordPress() {
+  if (!process.env.WC_URL) return [];
+  const url = new URL(process.env.WC_URL);
+  return [{
+    protocol: url.protocol.replace(':', ''),
+    hostname: url.hostname,
+    port: url.port,
+    pathname: '/wp-content/uploads/**',
+  }];
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: imagesWordPress(),
+  },
   async headers() {
     return [
       {

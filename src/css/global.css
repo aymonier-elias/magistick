@@ -10,6 +10,8 @@
     --gris: #BDB8D6;
     --bordure: rgba(248, 247, 244, 0.2);
     --bordure-douce: rgba(248, 247, 244, 0.12);
+    /* Police des titres (--audiowide est défini par next/font dans layout.jsx) */
+    --titre: var(--audiowide);
 }
 
 * {
@@ -29,4 +31,28 @@ body {
 
 h1 {
     font-family: var(--audiowide);
+}
+
+/* Pages d'erreur (error.jsx, not-found.jsx) */
+.page-erreur {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.page-erreur-actions {
+    display: flex;
+    gap: 24px;
+}
+
+.page-erreur-actions a,
+.page-erreur-actions button {
+    color: var(--cyan);
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
 }

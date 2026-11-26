@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Form from "next/form";
 import { getCatalogue, getFiltresDisponibles, DISPONIBILITES } from "@/bdd/produits";
-import ProduitCard from "@/components/catalogue/produitCard";
+import ProduitCard from "@/components/catalogue/ProduitCard";
 import FormulaireFiltres, { CurseurPrix } from "@/components/catalogue/FormulaireFiltres";
 
 import '@/css/catalogue/catalogue.css';
@@ -48,39 +48,27 @@ export default async function Produits({ searchParams }) {
                 <h1>LA COLLECTION  </h1>
             </div>
 
-            <div>
-                {/* Barre de recherche : met à jour l'URL (?recherche=...) */}
-                <Form action="/catalogue" key={cleFiltres}>
-                    {champsCaches(filtres, Object.keys(filtres).filter((nom) => nom !== "recherche"))}
-                    <label>
-                        <input className="barreRecherche" type="search" name="recherche" defaultValue={filtres.recherche} placeholder="Rechercher un sceptre..." />
-                    </label>
-                    <button type="submit">
-                        Rechercher
-                    </button>
-                    {Object.keys(filtres).length > 0 && (
-                        <p>
-                            {filtres.recherche && <>Recherche : {filtres.recherche} — </>}
-                            <Link href="/catalogue">Réinitialiser</Link>
-                        </p>
-                    )}
-                </Form>
-
-                {/* Bloc filtres + produits */}
-                <aside className="filtres-catalogue">
+            {/* Filtres à gauche, résultats à droite */}
+            <div className="catalogue-corps">
+                <aside>
                     {/* Pas de key : l'ancien formulaire reste affiché pendant le calcul du nouveau */}
-                    <Suspense fallback={<div className="filtres"><p>Filtres</p></div>}>
+                    <Suspense fallback={<div className="catalogue-filtres"><p>Filtres</p></div>}>
                         <FiltresProduits filtres={filtres} filtresCatalogue={filtresCatalogue} cle={cleFiltres} />
                     </Suspense>
                 </aside>
 
                 {/* Colonne de droite : recherche, nombre de résultats, grille, pagination */}
-                <section className="zone-resultats">
+                <section className="catalogue-resultats">
+                    {/* Barre de recherche : met à jour l'URL (?recherche=...) */}
                     <Form action="/catalogue" key={cleFiltres} className="catalogue-recherche">
                         {champsCaches(filtres, Object.keys(filtres).filter((nom) => nom !== "recherche"))}
-                        <label>
-                            <input className="barreRecherche" type="search" name="recherche" defaultValue={filtres.recherche} />
-                        </label>
+                        <input
+                            type="search"
+                            name="recherche"
+                            defaultValue={filtres.recherche}
+                            placeholder="Rechercher un sceptre..."
+                            aria-label="Rechercher un produit"
+                        />
                         <button type="submit">
                             Rechercher
                         </button>
@@ -148,7 +136,7 @@ async function FiltresProduits({ filtres, filtresCatalogue, cle }) {
     const lienReinitialiser = { pathname: "/catalogue", query: filtres.recherche ? { recherche: filtres.recherche } : {} };
 
     return (
-        <FormulaireFiltres className="filtres" key={cle}>
+        <FormulaireFiltres className="catalogue-filtres" key={cle}>
             {champsCaches(filtres, ["recherche", "prixMin"])}
 
             <GroupeFiltre
@@ -222,7 +210,7 @@ async function ResultatsProduits({ filtres, filtresCatalogue, page }) {
             {produits.length === 0 ? (
                 <p>Aucun produit ne correspond.</p>
             ) : (
-                <div id="resultatCatalogue">
+                <div className="catalogue-grille">
                     {produits.map((produit) => (
                         <ProduitCard key={produit.id} produit={produit} />
                     ))}

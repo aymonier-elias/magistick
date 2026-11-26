@@ -1,19 +1,22 @@
 // Session utilisateur WordPress (JWT dans un cookie httpOnly) — serveur uniquement.
 // Équivalent de l'ancien hook useAuth : const utilisateur = await getUtilisateurConnecte();
 import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
+import { urlWordPress, optionsCookie } from './utils';
 
 const COOKIE = 'auth_token';
-
-const wordpressUrl = () => (process.env.WC_URL || '').replace(/\/+$/, '');
+const DUREE_COOKIE = 60 * 60 * 24 * 7; // 7 jours
 
 // Utilisateur connecté { id, email, first_name, last_name }, ou null.
-export async function getUtilisateurConnecte() {
+// React.cache : un seul appel à WordPress par requête, même si le Header
+// et la page le demandent tous les deux.
+export const getUtilisateurConnecte = cache(async () => {
   const token = (await cookies()).get(COOKIE)?.value;
   if (!token) return null;
 
   try {
-    const response = await fetch(`${wordpressUrl()}/wp-json/wp/v2/users/me?context=edit`, {
+    const response = await fetch(`${urlWordPress()}/wp-json/wp/v2/users/me?context=edit`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
@@ -29,11 +32,11 @@ export async function getUtilisateurConnecte() {
   } catch {
     return null;
   }
-}
+});
 
 // Échange email + mot de passe contre un token JWT (ou null si refusé).
 export async function demanderToken(email, mdp) {
-  const response = await fetch(`${wordpressUrl()}/wp-json/jwt-auth/v1/token`, {
+  const response = await fetch(`${urlWordPress()}/wp-json/jwt-auth/v1/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username: email, password: mdp }),
@@ -45,13 +48,7 @@ export async function demanderToken(email, mdp) {
 
 // À appeler uniquement depuis une Server Action (les cookies n'y sont modifiables que là).
 export async function ouvrirSession(token) {
-  (await cookies()).set(COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  (await cookies()).set(COOKIE, token, optionsCookie(DUREE_COOKIE));
 }
 
 export async function fermerSession() {

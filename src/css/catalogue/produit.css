@@ -1,0 +1,53 @@
+/* =========================================================================
+   Page produit — fiche d'un produit (image, informations, attributs)
+   ========================================================================= */
+
+.produit-titre {
+    font-size: 54px;
+}
+
+/* Image à gauche, informations à droite */
+.produit-corps {
+    display: flex;
+    justify-content: space-around;
+    gap: 24px;
+}
+
+.produit-image {
+    width: 40%;
+    border: 1px solid white;
+}
+
+.produit-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.produit-infos {
+    padding: 32px;
+    border: 1px solid white;
+    border-radius: 24px;
+}
+
+.produit-attributs {
+    margin: 16px 8px;
+    padding: 0 16px;
+    border-top: 1px solid white;
+}
+
+/* Écrans étroits : image au-dessus des informations */
+@media (max-width: 900px) {
+    .produit-corps {
+        flex-direction: column;
+    }
+
+    .produit-image {
+        width: 100%;
+    }
+}
+
+.produit-chargement {
+    padding: 2rem;
+    color: var(--gris);
+}

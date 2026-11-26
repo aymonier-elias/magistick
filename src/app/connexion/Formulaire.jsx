@@ -1,17 +1,19 @@
 "use client";
 
+// Colonne de droite de /connexion : onglets et formulaires connexion / inscription.
+
 import { useState, useActionState } from 'react';
 import Link from 'next/link';
 
-import CercleMagique from '@/components/svg/Cercle-magique';
-import Input from '@/components/form/input';
+import { Champ, ChampMotDePasse, BoutonPrincipal } from '@/components/form/Champ';
 import { connexion, inscription } from '@/bdd/actions-auth';
+import styles from '@/css/connexion/connexion.module.css';
 
 function Messages({ etat }) {
     return (
         <>
-            {etat?.erreur && <p className="erreur">{etat.erreur}</p>}
-            {etat?.message && <p className="succes">{etat.message}</p>}
+            {etat?.erreur ? <p className={styles.erreur}>{etat.erreur}</p> : null}
+            {etat?.message ? <p className={styles.succes}>{etat.message}</p> : null}
         </>
     );
 }
@@ -23,133 +25,101 @@ export default function Formulaire({ modeInitial }) {
     const [etatConnexion, actionConnexion, connexionEnCours] = useActionState(connexion, null);
     const [etatInscription, actionInscription, inscriptionEnCours] = useActionState(inscription, null);
 
+    const classeOnglet = (actif) => (actif ? `${styles.onglet} ${styles.actif}` : styles.onglet);
+
     return (
-        <div className="conteneur">
+        <div className={styles.droite}>
 
-            <div className="gauche">
-                <div className="cercle">
-                    <CercleMagique />
+            <Link href="/" className={styles.retour}>
+                Retour à la boutique
+            </Link>
+
+            <div className={styles.boite}>
+
+                {/* Onglets Connexion / Inscription */}
+                <div className={styles.boutons}>
+                    <span className={estConnexion ? styles.pastille : `${styles.pastille} ${styles.pastilleDroite}`} />
+
+                    <button type="button" className={classeOnglet(estConnexion)} onClick={() => setEstConnexion(true)}>
+                        CONNEXION
+                    </button>
+
+                    <button type="button" className={classeOnglet(!estConnexion)} onClick={() => setEstConnexion(false)}>
+                        INSCRIPTION
+                    </button>
                 </div>
 
-                <div className="texte">
-                    <h1>
-                        Votre sceptre <span>vous attend.</span>
-                    </h1>
-                </div>
-            </div>
+                {estConnexion ? (
+                    <form className={styles.formConnexion} action={actionConnexion}>
 
-            <div className="droite">
+                        <div className={styles.entete}>
+                            <h2>Ravis de vous revoir</h2>
+                            <p>Connectez-vous pour retrouver vos favoris et vos commandes.</p>
+                        </div>
 
-                <Link href="/" className="retour">
-                    Retour à la boutique
-                </Link>
+                        <Champ label="E-Mail" name="email" type="email" required />
+                        <ChampMotDePasse label="Mot de passe" name="mdp" autoComplete="current-password" required />
 
-                <div className="boite">
+                        <div className={styles.mdpOublie}>
+                            <a href="#">Mot de passe oublié ?</a>
+                        </div>
 
-                    {/* Boutons Connexion / Inscription */}
-                    <div className="boutons">
+                        <Messages etat={etatConnexion} />
 
-                        <span
-                            className="onglets"
-                            style={estConnexion ? { left: "4px" } : { right: "4px" }}
-                        ></span>
+                        <BoutonPrincipal disabled={connexionEnCours}>
+                            {connexionEnCours ? "Connexion..." : "Se connecter"}
+                        </BoutonPrincipal>
 
-                        <button
-                            type="button"
-                            className={estConnexion ? "connexion actif" : "connexion"}
-                            onClick={() => setEstConnexion(true)}
-                        >
-                            CONNEXION
-                        </button>
+                        <p className={styles.bascule}>
+                            Pas encore de compte ?
+                            <button type="button" className={styles.lienBtn} onClick={() => setEstConnexion(false)}>
+                                Créer un compte
+                            </button>
+                        </p>
 
-                        <button
-                            type="button"
-                            className={estConnexion ? "inscription" : "inscription actif"}
-                            onClick={() => setEstConnexion(false)}
-                        >
-                            INSCRIPTION
-                        </button>
+                    </form>
+                ) : (
+                    <form className={styles.formInscription} action={actionInscription}>
 
-                    </div>
+                        <div className={styles.entete}>
+                            <h2>Rejoignez le cercle</h2>
+                            <p>Créez votre compte en moins d&apos;une minute.</p>
+                        </div>
 
-                    {estConnexion ? (
+                        <div className={styles.grille}>
+                            <Champ label="Prénom" name="prenom" autoComplete="given-name" required />
+                            <Champ label="Nom" name="nom" autoComplete="family-name" required />
+                        </div>
 
-                        /* FORMULAIRE CONNEXION */
-                        <form className="partieconnexion" action={actionConnexion}>
+                        <Champ label="E-Mail" name="email" type="email" required />
+                        <ChampMotDePasse label="Mot de passe" name="mdp" autoComplete="new-password" required />
 
-                            <div className="entete">
-                                <h2>Ravis de vous revoir</h2>
-                                <p>Connectez-vous pour retrouver vos favoris et vos commandes.</p>
-                            </div>
+                        <label className={styles.accepter}>
+                            <input type="checkbox" name="cgu" required />
+                            <span>
+                                J&apos;accepte les{' '}
+                                <a href="#">conditions générales</a>
+                                {' '}et la{' '}
+                                <a href="#">politique de confidentialité</a>.
+                            </span>
+                        </label>
 
-                            <Input label="E-Mail" name="email" type="email" required={true} />
-                            <Input label="Mot de passe" name="mdp" type="password" required={true} />
+                        <Messages etat={etatInscription} />
 
-                            <Messages etat={etatConnexion} />
+                        <BoutonPrincipal disabled={inscriptionEnCours}>
+                            {inscriptionEnCours ? "Création..." : "Créer mon compte"}
+                        </BoutonPrincipal>
 
-                            <Input
-                                type="submit"
-                                label={connexionEnCours ? "Connexion..." : "Se connecter"}
-                                disabled={connexionEnCours}
-                            />
+                        <p className={styles.bascule}>
+                            Déjà membre ?
+                            <button type="button" className={styles.lienBtn} onClick={() => setEstConnexion(true)}>
+                                Se connecter
+                            </button>
+                        </p>
 
-                            <p className="bascule">
-                                Pas encore de compte ?
-                                <button type="button" className="lien-btn" onClick={() => setEstConnexion(false)}>
-                                    Créer un compte
-                                </button>
-                            </p>
+                    </form>
+                )}
 
-                        </form>
-
-                    ) : (
-
-                        /* FORMULAIRE INSCRIPTION */
-                        <form className="partieinscription" action={actionInscription}>
-
-                            <div className="entete">
-                                <h2>Rejoignez le cercle</h2>
-                                <p>Créez votre compte en moins d&apos;une minute.</p>
-                            </div>
-
-                            <div className="grille">
-                                <Input label="Prénom" name="prenom" required={true} />
-                                <Input label="Nom" name="nom" required={true} />
-                            </div>
-
-                            <Input label="E-Mail" name="email" type="email" required={true} />
-                            <Input label="Mot de passe" name="mdp" type="password" required={true} />
-
-                            <label className="accepter">
-                                <p>
-                                    <input type="checkbox" name="cgu" id="cgu" required />
-                                    J&apos;accepte les{' '}
-                                    <a href="#">conditions générales</a>
-                                    {' '}et la{' '}
-                                    <a href="#">politique de confidentialité</a>.
-                                </p>
-                            </label>
-
-                            <Messages etat={etatInscription} />
-
-                            <Input
-                                type="submit"
-                                label={inscriptionEnCours ? "Création..." : "Créer mon compte"}
-                                disabled={inscriptionEnCours}
-                            />
-
-                            <p className="bascule">
-                                Déjà membre ?
-                                <button type="button" className="lien-btn" onClick={() => setEstConnexion(true)}>
-                                    Se connecter
-                                </button>
-                            </p>
-
-                        </form>
-
-                    )}
-
-                </div>
             </div>
         </div>
     );
