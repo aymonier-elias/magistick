@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPrix } from "@/utils/format";
 import Apercu3D from "./Apercu3D";
+import BoutonPanier from "./BoutonPanier";
 
 // Note sur 5 en étoiles pleines / vides (ex. 3,6 -> ★★★★☆)
 function Etoiles({ note, nombreAvis }) {
@@ -13,10 +14,12 @@ function Etoiles({ note, nombreAvis }) {
 }
 
 // Carte produit du catalogue :
-// badge de puissance, aperçu 3D (ou placeholder), nom, prix, note, bouton.
-export default function ProduitCard({ produit }) {
+// badge de puissance, aperçu 3D (ou placeholder), nom, prix, note, boutons.
+// connecte : affiche « Ajouter au panier » (réservé aux utilisateurs connectés).
+export default function ProduitCard({ produit, connecte = false }) {
     const lien = `/catalogue/${produit.id}`;
     const puissance = produit.categories?.[0]?.name;
+    const indisponible = produit.stock_status === "outofstock";
 
     return (
         <article className="carte-produit">
@@ -42,9 +45,11 @@ export default function ProduitCard({ produit }) {
                 <Etoiles note={produit.average_rating} nombreAvis={produit.rating_count} />
             </div>
 
-            {produit.stock_status === "outofstock" && <p className="carte-indisponible">Indisponible</p>}
+            {indisponible ? <p className="carte-indisponible">Indisponible</p> : null}
 
             <Link href={lien} className="carte-bouton">Voir le produit</Link>
+
+            {connecte ? <BoutonPanier idProduit={produit.id} indisponible={indisponible} /> : null}
         </article>
     );
 }

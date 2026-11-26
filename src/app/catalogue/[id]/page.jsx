@@ -2,18 +2,54 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import { getProduitPublie } from '@/bdd/produits';
-import '@/css/catalogue/catalogue.css';
+import { getUtilisateurConnecte } from '@/bdd/auth';
+import AjoutPanier from '@/components/catalogue/AjoutPanier';
+import { formatPrix } from '@/utils/format';
+import '@/css/catalogue/produit.css';
+
+// La description vient de WooCommerce en HTML : on la nettoie avant de l'afficher.
+// sanitize-html n'utilise pas jsdom (qui exige une version récente de Node sur le serveur).
+// Par défaut : pas de <script>, <style>, formulaires, attributs style / on* / data-*.
+const OPTIONS_SANITIZE = {
+  allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+  allowedAttributes: {
+    a: ['href', 'name', 'target', 'rel'],
+    img: ['src', 'alt', 'width', 'height'],
+  },
+  allowedSchemes: ['http', 'https', 'mailto'],
+  // Un lien qui ouvre un nouvel onglet ne doit pas donner accès à notre page (window.opener)
+  transformTags: {
+    a: (tagName, attribs) => ({
+      tagName,
+      attribs: attribs.target === '_blank' ? { ...attribs, rel: 'noopener noreferrer' } : attribs,
+    }),
+  },
+};
+
+// Texte brut d'une description HTML, pour la balise meta
+const texteBrut = (html) => sanitizeHtml(html ?? '', { allowedTags: [], allowedAttributes: {} }).trim();
+
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const produit = await getProduitPublie(id);
+  if (!produit) return {};
+
+  return {
+    title: `${produit.name} | Magistick`,
+    description: texteBrut(produit.short_description || produit.description).slice(0, 160),
+  };
+}
 
 export default async function Produit({ params }) {
   const { id } = await params;
 
-  const produit = await getProduitPublie(id);
+  // Les deux appels sont indépendants : on les lance en même temps
+  const [produit, utilisateur] = await Promise.all([getProduitPublie(id), getUtilisateurConnecte()]);
   if (!produit) notFound();
 
   const description = sanitizeHtml(produit.description, OPTIONS_SANITIZE);
   const image = produit.images[0];
-
-  console.log(produit);
+  const prix = formatPrix(produit.price);
 
   return (
     <div>
@@ -58,7 +94,14 @@ export default async function Produit({ params }) {
             )}
           </div>
 
-          <div>{produit.price} €</div>
+          <p>{prix ?? 'Prix non renseigné'}</p>
+
+          {/* Ajout au panier réservé aux utilisateurs connectés */}
+          {utilisateur ? (
+            <AjoutPanier idProduit={produit.id} indisponible={produit.stock_status === 'outofstock'} />
+          ) : (
+            <p>Veuillez vous connecter pour ajouter cet objet dans votre panier</p>
+          )}
         </div>
       </div>
     </div>

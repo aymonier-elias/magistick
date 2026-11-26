@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Form from "next/form";
 import { getCatalogue, getFiltresDisponibles, DISPONIBILITES } from "@/bdd/produits";
+import { getUtilisateurConnecte } from "@/bdd/auth";
 import ProduitCard from "@/components/catalogue/ProduitCard";
 import FormulaireFiltres, { CurseurPrix } from "@/components/catalogue/FormulaireFiltres";
 
@@ -187,7 +188,11 @@ async function FiltresProduits({ filtres, filtresCatalogue, cle }) {
 
 // Nombre de résultats, grille de cartes et pagination
 async function ResultatsProduits({ filtres, filtresCatalogue, page }) {
-    const { produits, total, totalPages, erreur } = await getCatalogue({ page, parPage: PAR_PAGE, ...filtresCatalogue });
+    // Produits et utilisateur (pour le bouton panier) chargés en parallèle
+    const [{ produits, total, totalPages, erreur }, utilisateur] = await Promise.all([
+        getCatalogue({ page, parPage: PAR_PAGE, ...filtresCatalogue }),
+        getUtilisateurConnecte(),
+    ]);
 
     // Lien vers une autre page en gardant la recherche et les filtres
     const lienPage = (n) => ({ pathname: "/catalogue", query: { ...filtres, page: n } });
@@ -212,7 +217,7 @@ async function ResultatsProduits({ filtres, filtresCatalogue, page }) {
             ) : (
                 <div className="catalogue-grille">
                     {produits.map((produit) => (
-                        <ProduitCard key={produit.id} produit={produit} />
+                        <ProduitCard key={produit.id} produit={produit} connecte={Boolean(utilisateur)} />
                     ))}
                 </div>
             )}

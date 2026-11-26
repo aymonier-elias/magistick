@@ -139,6 +139,35 @@
     text-align: center;
 }
 
+/* Ajout au panier depuis la carte (utilisateurs connectés) */
+.carte-panier {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.carte-bouton-panier {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 999px;
+    background: var(--rose);
+    color: var(--nuit);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.carte-bouton-panier:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.carte-panier-message {
+    font-size: 14px;
+    text-align: center;
+    color: var(--gris);
+}
+
 /* Aperçu 3D (ou placeholder) : carré, pleine largeur de la carte */
 .apercu3d {
     width: 100%;

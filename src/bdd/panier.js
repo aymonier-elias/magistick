@@ -24,11 +24,12 @@ const urlStoreApi = () => `${urlWordPress()}/wp-json/wc/store/v1`;
 // Appel à la Store API
 // ---------------------------------------------------------------------------
 
-// Appelle la Store API avec le jeton du panier.
+// Appelle la Store API avec le jeton du panier (celui du cookie par défaut,
+// ou `token` s'il est fourni ; null = sans jeton).
 // Renvoie { data, nouveauToken } ; en cas de refus, lance une erreur avec .code
 // (ex. woocommerce_rest_product_out_of_stock) et .status.
-async function storeApi(route, { method = 'GET', body } = {}) {
-  const token = (await cookies()).get(COOKIE)?.value;
+async function storeApi(route, { method = 'GET', body, token } = {}) {
+  if (token === undefined) token = (await cookies()).get(COOKIE)?.value;
 
   const reponse = await fetch(`${urlStoreApi()}/${route}`, {
     method,
@@ -128,12 +129,37 @@ export async function getCommande(id, cle) {
 // Modifications (à appeler depuis actions-panier.js uniquement)
 // ---------------------------------------------------------------------------
 
+// Erreurs renvoyées quand une écriture arrive sans jeton de panier valide
+const ERREURS_NONCE = ['woocommerce_rest_missing_nonce', 'woocommerce_rest_invalid_nonce'];
+
+// Demande un nouveau panier (vide) à WooCommerce et renvoie son jeton.
+async function nouveauJeton() {
+  const { nouveauToken } = await storeApi('cart', { token: null });
+  if (!nouveauToken) throw new Error('Store API : aucun Cart-Token renvoyé.');
+  return nouveauToken;
+}
+
 // POST sur une route de la Store API, puis garde le jeton (nouveau panier ou
 // panier expiré remplacé). Renvoie le panier à jour, ou la réponse du checkout.
+//
+// La Store API refuse toute écriture sans jeton de panier valide (sinon elle
+// exige un nonce WordPress, que seul un navigateur sur le site WordPress
+// possède) : au premier ajout, ou si le jeton a expiré, on en demande un
+// nouveau par un GET /cart, puis on refait la requête avec.
 export async function modifierPanier(route, body) {
-  const { data, nouveauToken } = await storeApi(route, { method: 'POST', body });
-  await enregistrerToken(nouveauToken);
-  return data;
+  let token = (await cookies()).get(COOKIE)?.value ?? (await nouveauJeton());
+
+  let reponse;
+  try {
+    reponse = await storeApi(route, { method: 'POST', body, token });
+  } catch (e) {
+    if (!ERREURS_NONCE.includes(e.code)) throw e;
+    token = await nouveauJeton();
+    reponse = await storeApi(route, { method: 'POST', body, token });
+  }
+
+  await enregistrerToken(reponse.nouveauToken ?? token);
+  return reponse.data;
 }
 
 // Après une commande : oublie le jeton (WooCommerce a vidé ce panier)
