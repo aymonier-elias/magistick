@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import { getProduitPublie } from '@/bdd/produits';
+import { getUtilisateurConnecte } from '@/bdd/auth';
+import Quantité from '@/components/catalogue/Quantité';
 import '@/css/catalogue/catalogue.css';
 
 export default async function Produit({ params }) {
@@ -23,7 +25,8 @@ export default async function Produit({ params }) {
 
   const image = produit.images[0];
 
-  console.log(produit);
+  // Gestion ajout panier
+  const user = await getUtilisateurConnecte();
 
   return (
     <div>
@@ -65,6 +68,14 @@ export default async function Produit({ params }) {
           }</div>
 
           <div>{produit.price} €</div>
+
+          { user ?
+          (
+            <Quantité idProduit={ produit.id } />
+          ) : (
+            <div>Veuillez vous connecter pour ajouter cet objet dans votre panier</div>
+          )
+        }
         </div>
       </div>
     </div>
