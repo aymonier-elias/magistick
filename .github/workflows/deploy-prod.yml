@@ -16,12 +16,13 @@ jobs:
           WC_URL: ${{ secrets.PROD_WC_URL }}
           WC_CONSUMER_KEY: ${{ secrets.PROD_WC_CONSUMER_KEY }}
           WC_CONSUMER_SECRET: ${{ secrets.PROD_WC_CONSUMER_SECRET }}
+          NODE_ENV: production
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USER }}
           port: ${{ secrets.PROD_PORT }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          envs: WC_URL,WC_CONSUMER_KEY,WC_CONSUMER_SECRET
+          envs: WC_URL,WC_CONSUMER_KEY,WC_CONSUMER_SECRET,NODE_ENV
 
           script: |
             set -e
@@ -34,8 +35,8 @@ jobs:
 
             echo "Écriture du fichier .env.local..."
             umask 077
-            printf 'WC_URL=%s\nWC_CONSUMER_KEY=%s\nWC_CONSUMER_SECRET=%s\n' \
-              "$WC_URL" "$WC_CONSUMER_KEY" "$WC_CONSUMER_SECRET" > .env.local
+            printf 'WC_URL=%s\nWC_CONSUMER_KEY=%s\nWC_CONSUMER_SECRET=%s\nNODE_ENV=%s\n' \
+              "$WC_URL" "$WC_CONSUMER_KEY" "$WC_CONSUMER_SECRET" "NODE_ENV" > .env.local
 
             echo "Installation des dépendances..."
             npm ci

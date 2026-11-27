@@ -19,7 +19,7 @@ function Messages({ etat }) {
 }
 
 export default function Formulaire({ modeInitial }) {
-    const [estConnexion, setEstConnexion] = useState(modeInitial !== 'register');
+    const [isConnexion, setIsConnexion] = useState(modeInitial !== 'register');
 
     // Chaque formulaire appelle directement sa Server Action
     const [etatConnexion, actionConnexion, connexionEnCours] = useActionState(connexion, null);
@@ -38,18 +38,18 @@ export default function Formulaire({ modeInitial }) {
 
                 {/* Onglets Connexion / Inscription */}
                 <div className={styles.boutons}>
-                    <span className={estConnexion ? styles.pastille : `${styles.pastille} ${styles.pastilleDroite}`} />
+                    <span className={isConnexion ? styles.pastille : `${styles.pastille} ${styles.pastilleDroite}`} />
 
-                    <button type="button" className={classeOnglet(estConnexion)} onClick={() => setEstConnexion(true)}>
+                    <button type="button" className={classeOnglet(isConnexion)} onClick={() => setIsConnexion(true)}>
                         CONNEXION
                     </button>
 
-                    <button type="button" className={classeOnglet(!estConnexion)} onClick={() => setEstConnexion(false)}>
+                    <button type="button" className={classeOnglet(!isConnexion)} onClick={() => setIsConnexion(false)}>
                         INSCRIPTION
                     </button>
                 </div>
 
-                {estConnexion ? (
+                {isConnexion ? (
                     <form className={styles.formConnexion} action={actionConnexion}>
 
                         <div className={styles.entete}>
@@ -72,7 +72,7 @@ export default function Formulaire({ modeInitial }) {
 
                         <p className={styles.bascule}>
                             Pas encore de compte ?
-                            <button type="button" className={styles.lienBtn} onClick={() => setEstConnexion(false)}>
+                            <button type="button" className={styles.lienBtn} onClick={() => setIsConnexion(false)}>
                                 Créer un compte
                             </button>
                         </p>
@@ -112,7 +112,7 @@ export default function Formulaire({ modeInitial }) {
 
                         <p className={styles.bascule}>
                             Déjà membre ?
-                            <button type="button" className={styles.lienBtn} onClick={() => setEstConnexion(true)}>
+                            <button type="button" className={styles.lienBtn} onClick={() => setIsConnexion(true)}>
                                 Se connecter
                             </button>
                         </p>

@@ -86,8 +86,7 @@ export async function getCatalogue({ page = 1, parPage = 20, ...filtres } = {}) 
   }
 }
 
-// Données qui changent rarement (attributs, prix max) : gardées en cache entre
-// les requêtes au lieu d'interroger WooCommerce à chaque changement de filtre.
+// Données qui changent rarement (attributs, prix max) : gardées en cache entre les requêtes au lieu d'interroger WooCommerce à chaque changement de filtre.
 // Pour forcer la mise à jour : revalidateTag(TAG_CATALOGUE).
 // (Next 16 recommande « use cache », qui exige d'activer cacheComponents.)
 export const TAG_CATALOGUE = 'catalogue';

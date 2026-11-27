@@ -9,8 +9,7 @@ const COOKIE = 'auth_token';
 const DUREE_COOKIE = 60 * 60 * 24 * 7; // 7 jours
 
 // Utilisateur connecté { id, email, first_name, last_name }, ou null.
-// React.cache : un seul appel à WordPress par requête, même si le Header
-// et la page le demandent tous les deux.
+// React.cache : un seul appel à WordPress par requête, même si le Header et la page le demandent tous les deux.
 export const getUtilisateurConnecte = cache(async () => {
   const token = (await cookies()).get(COOKIE)?.value;
   if (!token) return null;

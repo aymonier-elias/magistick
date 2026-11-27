@@ -1,5 +1,6 @@
 import { getPanier, enEuros } from "@/bdd/panier";
 import { formatPrix } from "@/utils/format";
+import FormulaireCommande from "./FormulaireCommande";
 
 export const metadata = {
     title: "Panier | Magistick",
@@ -8,6 +9,7 @@ export const metadata = {
 // Page panier (version de test) : liste des articles et total.
 export default async function Panier() {
     const panier = await getPanier();
+
 
     if (!panier || panier.items_count === 0) {
         return <p>Votre panier est vide.</p>;
@@ -27,6 +29,11 @@ export default async function Panier() {
                 ))}
             </ul>
             <p>Total : {formatPrix(enEuros(panier.totals.total_price, unite))}</p>
+
+            <div>
+                <h2>Passer commande</h2>
+                <FormulaireCommande />
+            </div>
         </div>
     );
 }

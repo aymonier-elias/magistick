@@ -9,7 +9,7 @@ import styles from "@/css/form/champs.module.css";
 export function Champ({ label, name, type = "text", autoComplete = name, required = false }) {
     return (
         <label className={styles.champ}>
-            {label}
+            {label} {required && '*'}
             <input type={type} name={name} autoComplete={autoComplete} required={required} />
         </label>
     );
